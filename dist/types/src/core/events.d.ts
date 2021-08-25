@@ -1,30 +1,17 @@
-import { Event } from "angular-pluggable";
-import { Severity } from "./qingcore";
-export declare class ToastEvent extends Event {
-    constructor(severity: Severity, message: string);
+export declare enum UIEvents {
+    TOAST = "Toast",
+    ALERT = "Alert",
+    OPEN_DIALOG = "OpenDialog",
+    CLOSE_DIALOG = "CloseDialog",
+    INSERT_MENU = "InsertMenu",
+    ADD_STATUS = "AddStatus",
+    LOAD_IN_MENU = "LoadInMenu",
+    LOAD_IN_SIDEBAR = "LoadInSidebar",
+    LOAD_IN_EDITORAREA = "LoadInEditorarea",
+    LOAD_IN_PANEL = "LoadInPanel",
+    LOAD_IN_WIDGETBAR = "LoadInWidgetbar"
 }
-export declare class AlertEvent extends Event {
-    constructor(message: string);
-}
-export declare class LoadInDialogEvent extends Event {
-    constructor(componentName: string);
-}
-export declare class LoadInMenuEvent extends Event {
-    constructor(componentName: string);
-}
-export declare class LoadInSidebarEvent extends Event {
-    constructor(componentName: string);
-}
-export declare class LoadInEditorAreaEvent extends Event {
-    constructor(componentName: string);
-}
-export declare class LoadInPanelEvent extends Event {
-    constructor(componentName: string);
-}
-export declare class LoadInWidgetBarEvent extends Event {
-    constructor(componentName: string);
-}
-export declare enum IOOperates {
+export declare enum IOEvents {
     LISTDIR = "list-dir",
     REMOVEDIR = "remove-dir",
     READFILE = "read-file",

@@ -1,54 +1,19 @@
-import { Event } from "angular-pluggable";
-import { Severity } from "./qingcore";
-
-export class ToastEvent extends Event {
-  constructor(severity: Severity, message: string) {
-    super("Toast", { severity, message });
-  }
+export enum UIEvents {
+	TOAST = "Toast",
+	ALERT = "Alert",
+	OPEN_DIALOG = "OpenDialog",
+	CLOSE_DIALOG = "CloseDialog",
+	INSERT_MENU = "InsertMenu",
+	ADD_STATUS = "AddStatus",
+	LOAD_IN_MENU = "LoadInMenu",
+	LOAD_IN_SIDEBAR = "LoadInSidebar",
+	LOAD_IN_EDITORAREA = "LoadInEditorarea",
+	LOAD_IN_PANEL = "LoadInPanel",
+	LOAD_IN_WIDGETBAR = "LoadInWidgetbar"
 }
 
-export class AlertEvent extends Event {
-  constructor(message: string) {
-    super("Alert", { message });
-  }
-}
 
-export class LoadInDialogEvent extends Event {
-  constructor(componentName: string) {
-    super("LoadInDialog", { componentName });
-  }
-}
-
-export class LoadInMenuEvent extends Event {
-  constructor(componentName: string) {
-    super("LoadInMenu", { componentName });
-  }
-}
-
-export class LoadInSidebarEvent extends Event {
-  constructor(componentName: string) {
-    super("LoadInSidebar", { componentName });
-  }
-}
-
-export class LoadInEditorAreaEvent extends Event {
-  constructor(componentName: string) {
-    super("LoadInEditorArea", { componentName });
-  }
-}
-
-export class LoadInPanelEvent extends Event {
-  constructor(componentName: string) {
-    super("LoadInPanel", { componentName });
-  }
-}
-export class LoadInWidgetBarEvent extends Event {
-  constructor(componentName: string) {
-    super("LoadInWidgetBar", { componentName });
-  }
-}
-
-export enum IOOperates {
+export enum IOEvents {
   LISTDIR = "list-dir",
   REMOVEDIR = "remove-dir",
   READFILE = "read-file",

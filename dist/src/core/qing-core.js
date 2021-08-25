@@ -20,10 +20,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 import { EreMessageChannel as msgc } from "electron-re";
-import { PluginStore } from "angular-pluggable";
-import { AlertEvent, IOOperates, LoadInDialogEvent, LoadInEditorAreaEvent, LoadInMenuEvent, LoadInPanelEvent, LoadInSidebarEvent, LoadInWidgetBarEvent, ToastEvent, } from "./events";
-import { Service } from "typedi";
+import { QingWebApiSdk } from "qing-web-api-sdk";
+import { Injectable } from "@angular/core";
+import { IOEvents, UIEvents } from "./events";
+import { Event, PluginStore } from "./plugin-store";
 export var Severity;
 (function (Severity) {
     Severity["SUCCESS"] = "success";
@@ -35,33 +43,76 @@ var QingCore = /** @class */ (function (_super) {
     function QingCore() {
         var _this = _super.call(this) || this;
         _this.pluginVariables = new Map();
+        _this.services = new Map();
         return _this;
     }
     QingCore_1 = QingCore;
+    /**
+     * 将angular的service实例注入
+     * @param service AngularService
+     * @param serviceInstance AngularService Instance
+     */
+    QingCore.prototype.InjectService = function (service, serviceInstance) {
+        this.services.set(service.name, serviceInstance);
+    };
+    /**
+     * 获取某个Service实例
+     * @param service
+     */
+    QingCore.prototype.GetService = function (service) {
+        return this.services.get(service.name);
+    };
+    /****************************** Plugin Api *****************************/
+    QingCore.prototype.InstallPlugin = function (plugin) {
+        this.install(plugin);
+    };
+    QingCore.prototype.UninstallPlugin = function (pluginName) {
+        this.uninstall(pluginName);
+    };
+    QingCore.prototype.EnablePlugin = function (pluginName, pluginConfig) { };
+    QingCore.prototype.DisablePlugin = function (pluginName) {
+        var _this = this;
+        var variables = this.pluginVariables.get(pluginName);
+        if (variables && variables.length > 0) {
+            var observers = variables.map(function (varName) {
+                return _this.observerMap.get(varName);
+            });
+            observers.forEach(function (observer) {
+                if (observer) {
+                    observer.next(null);
+                    observer.complete();
+                }
+            });
+        }
+    };
+    /*******************************************************************************/
     /****************************** UI Api *****************************/
     QingCore.prototype.Toast = function (severity, message) {
-        this.Emit(new ToastEvent(severity, message));
+        this.Emit(new Event(UIEvents.TOAST, { severity: severity, message: message }));
     };
     QingCore.prototype.Alert = function (message) {
-        this.Emit(new AlertEvent(message));
+        this.Emit(new Event(UIEvents.ALERT, { message: message }));
     };
-    QingCore.prototype.LoadInDialog = function (componentName) {
-        this.Emit(new LoadInDialogEvent(componentName));
+    QingCore.prototype.OpenDialog = function (componentName) {
+        this.Emit(new Event(UIEvents.OPEN_DIALOG, { componentName: componentName }));
+    };
+    QingCore.prototype.CloseDialog = function () {
+        this.Emit(new Event(UIEvents.CLOSE_DIALOG));
     };
     QingCore.prototype.LoadInMenu = function (componentName) {
-        this.Emit(new LoadInMenuEvent(componentName));
+        this.Emit(new Event(UIEvents.LOAD_IN_MENU, { componentName: componentName }));
     };
     QingCore.prototype.LoadInSidebar = function (componentName) {
-        this.Emit(new LoadInSidebarEvent(componentName));
+        this.Emit(new Event(UIEvents.LOAD_IN_SIDEBAR, { componentName: componentName }));
     };
     QingCore.prototype.LoadInEditorArea = function (componentName) {
-        this.Emit(new LoadInEditorAreaEvent(componentName));
+        this.Emit(new Event(UIEvents.LOAD_IN_EDITORAREA, { componentName: componentName }));
     };
-    QingCore.prototype.LoadInPanel = function (componentName) {
-        this.Emit(new LoadInPanelEvent(componentName));
+    QingCore.prototype.LoadInConsolePanel = function (componentName) {
+        this.Emit(new Event(UIEvents.LOAD_IN_PANEL, { componentName: componentName }));
     };
     QingCore.prototype.LoadInWidgetBar = function (componentName) {
-        this.Emit(new LoadInWidgetBarEvent(componentName));
+        this.Emit(new Event(UIEvents.LOAD_IN_WIDGETBAR, { componentName: componentName }));
     };
     QingCore.prototype.RegistVariable = function (pluginName, varName, data) {
         var variables = this.pluginVariables.get(pluginName);
@@ -79,6 +130,30 @@ var QingCore = /** @class */ (function (_super) {
         return this.getObserver(varName);
     };
     /*******************************************************************************/
+    /****************************** Storage Api *****************************/
+    QingCore.prototype.Set = function (key, data) {
+        if (typeof data === "object") {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+        else {
+            localStorage.setItem(key, data);
+        }
+    };
+    QingCore.prototype.Get = function (key) {
+        var data = localStorage.getItem(key);
+        if (!data)
+            return null;
+        try {
+            return JSON.parse(data);
+        }
+        catch (error) {
+            return data;
+        }
+    };
+    QingCore.prototype.Remove = function (key) {
+        localStorage.removeItem(key);
+    };
+    /*******************************************************************************/
     /****************************** Event Listener Api *****************************/
     QingCore.prototype.Emit = function (event) {
         this.dispatchEvent(event);
@@ -89,12 +164,31 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.Once = function (eventName, listener) {
         this.addOnceEventListener(eventName, listener);
     };
+    QingCore.prototype.Off = function (eventName, listener) {
+        this.removeListener(eventName, listener);
+    };
+    QingCore.prototype.OffAll = function () {
+        this.removeAllEvents();
+    };
     /*******************************************************************************/
+    QingCore.prototype.Invoke = function (funcName) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        return this.execFunction.apply(this, __spreadArrays([funcName], args));
+    };
+    QingCore.prototype.Bind = function (funcName, fn) {
+        this.addFunction(funcName, fn);
+    };
+    QingCore.prototype.UnBind = function (funcName) {
+        this.removeFunction(funcName);
+    };
     /****************************** IO Api *****************************************/
     QingCore.prototype.ListDir = function (dir) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.LISTDIR, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.LISTDIR, {
                 dir: dir,
             })
                 .then(function (res) {
@@ -110,7 +204,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.RemoveDir = function (dir) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.REMOVEDIR, { dir: dir })
+                .invoke(QingCore_1.IoServiceName, IOEvents.REMOVEDIR, { dir: dir })
                 .then(function (res) {
                 var error = res.error, data = res.data;
                 if (error) {
@@ -124,7 +218,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.ReadFile = function (file) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.READFILE, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.READFILE, {
                 file: file,
                 options: { encoding: "utf8" },
             })
@@ -141,7 +235,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.WriteFile = function (file, data) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.WRITEFILE, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.WRITEFILE, {
                 file: file,
                 data: data,
             })
@@ -158,7 +252,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.RemoveFile = function (file, data) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.REMOVEFILE, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.REMOVEFILE, {
                 file: file,
                 data: data,
             })
@@ -175,7 +269,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.ReadJson = function (path) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.READJSON, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.READJSON, {
                 path: path,
             })
                 .then(function (res) {
@@ -191,7 +285,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.WriteJson = function (path, data) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.WRITEJSON, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.WRITEJSON, {
                 path: path,
                 data: data,
             })
@@ -208,7 +302,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.DownloadFile = function (url, output) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.DOWNLOADFILE, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.DOWNLOADFILE, {
                 url: url,
                 output: output,
             })
@@ -225,7 +319,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.UploadFile = function (file) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.UPLOADFILE, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.UPLOADFILE, {
                 file: file,
             })
                 .then(function (res) {
@@ -241,7 +335,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.CopyFiles = function (files) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.COPYFILES, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.COPYFILES, {
                 files: files,
             })
                 .then(function (res) {
@@ -257,7 +351,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.ZipFiles = function (files) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.ZIPFILES, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.ZIPFILES, {
                 files: files,
             })
                 .then(function (res) {
@@ -273,7 +367,7 @@ var QingCore = /** @class */ (function (_super) {
     QingCore.prototype.Unzip = function (file) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(QingCore_1.IoServiceName, IOOperates.UNZIP, {
+                .invoke(QingCore_1.IoServiceName, IOEvents.UNZIP, {
                 file: file,
             })
                 .then(function (res) {
@@ -286,23 +380,16 @@ var QingCore = /** @class */ (function (_super) {
             });
         });
     };
+    Object.defineProperty(QingCore.prototype, "WebServiceSdk", {
+        /*******************************************************************************/
+        /****************************** Web Service Api *****************************************/
+        get: function () {
+            return QingWebApiSdk.getInstance();
+        },
+        enumerable: false,
+        configurable: true
+    });
     /*******************************************************************************/
-    QingCore.prototype.EnablePlugin = function (pluginName, pluginConfig) { };
-    QingCore.prototype.DisablePlugin = function (pluginName) {
-        var _this = this;
-        var variables = this.pluginVariables.get(pluginName);
-        if (variables && variables.length > 0) {
-            var observers = variables.map(function (varName) {
-                return _this.observerMap.get(varName);
-            });
-            observers.forEach(function (observer) {
-                if (observer) {
-                    observer.next(null);
-                    observer.complete();
-                }
-            });
-        }
-    };
     QingCore.prototype.Destroy = function () {
         var observers = Array.from(this.observerMap.values());
         observers.forEach(function (observer) {
@@ -310,14 +397,17 @@ var QingCore = /** @class */ (function (_super) {
             observer.complete();
         });
         _super.prototype.removeAllListeners.call(this);
+        this.OffAll();
     };
     var QingCore_1;
     QingCore.IoServiceName = "io-service";
     QingCore = QingCore_1 = __decorate([
-        Service(),
+        Injectable({
+            providedIn: "root",
+        }),
         __metadata("design:paramtypes", [])
     ], QingCore);
     return QingCore;
 }(PluginStore));
 export { QingCore };
-//# sourceMappingURL=qingcore.js.map
+//# sourceMappingURL=qing-core.js.map

@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @types/rxjs
+  C:\Program Files\nodejs\node.exe C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add qing-web-api-sdk
 
 PATH: 
   C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;D:\Gradle\bin;D:\apache-jmeter-5.4.1\bin;D:\Go\bin;C:\Users\moJiXiang\AppData\Roaming\Python\Python39\Scripts;C:\Users\moJiXiang\kubectl.exe;D:\Kubernetes\Minikube;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\dotnet\;C:\Users\moJiXiang\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\moJiXiang\AppData\Local\Programs\Python\Python39\;C:\Users\moJiXiang\AppData\Local\Microsoft\WindowsApps;D:\SOFTWARE\Microsoft VS Code\bin;C:\Users\moJiXiang\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Users\moJiXiang\AppData\Roaming\npm;D:\SOFTWARE\Git\cmd;C:\Users\moJiXiang\go\bin
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.npm.taobao.org/@types%2frxjs: Not found
+  Error: https://registry.npm.taobao.org/qing-web-api-sdk: Not found
       at Request.params.callback [as _callback] (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66988:18)
       at Request.self.callback (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140662:22)
       at Request.emit (events.js:315:20)
@@ -30,7 +30,7 @@ npm manifest:
   {
     "name": "qing-core",
     "version": "1.0.10",
-    "main": "dist/index.js",
+    "main": "dist/src/index.js",
     "types": "dist/types/src/index.d.ts",
     "author": "moJiXiang",
     "license": "MIT",
@@ -45,8 +45,7 @@ npm manifest:
     },
     "dependencies": {
       "angular-pluggable": "^1.0.10",
-      "rxjs": "^7.3.0",
-      "semver": "^7.3.5",
+      "reflect-metadata": "^0.1.13",
       "typedi": "^0.10.0"
     },
     "files": [
@@ -138,13 +137,6 @@ Lockfile:
     resolved "https://registry.nlark.com/inherits/download/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
     integrity sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w=
   
-  lru-cache@^6.0.0:
-    version "6.0.0"
-    resolved "https://registry.nlark.com/lru-cache/download/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
-    integrity sha1-bW/mVw69lqr5D8rR2vo7JWbbOpQ=
-    dependencies:
-      yallist "^4.0.0"
-  
   minimatch@^3.0.4:
     version "3.0.4"
     resolved "https://registry.npm.taobao.org/minimatch/download/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -164,6 +156,11 @@ Lockfile:
     resolved "https://registry.nlark.com/path-is-absolute/download/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
     integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
   
+  reflect-metadata@^0.1.13:
+    version "0.1.13"
+    resolved "https://registry.nlark.com/reflect-metadata/download/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+    integrity sha1-Z648pXyXKiqhZCsQ/jY/4y1J3Ag=
+  
   rimraf@^3.0.2:
     version "3.0.2"
     resolved "https://registry.npm.taobao.org/rimraf/download/rimraf-3.0.2.tgz#f1a5402ba6220ad52cc1282bac1ae3aa49fd061a"
@@ -178,19 +175,12 @@ Lockfile:
     optionalDependencies:
       fsevents "~2.3.2"
   
-  rxjs@^7.0.1, rxjs@^7.3.0:
+  rxjs@^7.0.1:
     version "7.3.0"
     resolved "https://registry.nlark.com/rxjs/download/rxjs-7.3.0.tgz#39fe4f3461dc1e50be1475b2b85a0a88c1e938c6"
     integrity sha1-Of5PNGHcHlC+FHWyuFoKiMHpOMY=
     dependencies:
       tslib "~2.1.0"
-  
-  semver@^7.3.5:
-    version "7.3.5"
-    resolved "https://registry.nlark.com/semver/download/semver-7.3.5.tgz?cache=0&sync_timestamp=1618847119601&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fsemver%2Fdownload%2Fsemver-7.3.5.tgz#0b621c879348d8998e4b0e4be94b3f12e6018ef7"
-    integrity sha1-C2Ich5NI2JmOSw5L6Us/EuYBjvc=
-    dependencies:
-      lru-cache "^6.0.0"
   
   tslib@^2.0.0:
     version "2.3.1"
@@ -216,8 +206,3 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.nlark.com/wrappy/download/wrappy-1.0.2.tgz?cache=0&sync_timestamp=1619133505879&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fwrappy%2Fdownload%2Fwrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
     integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
-  
-  yallist@^4.0.0:
-    version "4.0.0"
-    resolved "https://registry.nlark.com/yallist/download/yallist-4.0.0.tgz?cache=0&sync_timestamp=1622604530774&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fyallist%2Fdownload%2Fyallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
-    integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=
