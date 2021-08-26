@@ -73,7 +73,7 @@ export declare class QingCore extends PluginStore {
     WriteJson(path: string, data: string): Promise<unknown>;
     DownloadFile(url: string, output: string): Promise<unknown>;
     UploadFile(file: string): Promise<unknown>;
-    CopyFiles(files: string): Promise<unknown>;
+    CopyFiles(source: string, dest: string): Promise<unknown>;
     ZipFiles(files: string): Promise<unknown>;
     Unzip(file: string): Promise<unknown>;
     /*******************************************************************************/

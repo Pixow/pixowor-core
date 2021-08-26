@@ -1,16 +1,3 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,394 +7,386 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
-import { EreMessageChannel as msgc } from "electron-re";
-import { QingWebApiSdk } from "qing-web-api-sdk";
-import { Injectable } from "@angular/core";
-import { IOEvents, UIEvents } from "./events";
-import { Event, PluginStore } from "./plugin-store";
-export var Severity;
-(function (Severity) {
-    Severity["SUCCESS"] = "success";
-    Severity["ERROR"] = "error";
-    Severity["INFO"] = "info";
-})(Severity || (Severity = {}));
-var QingCore = /** @class */ (function (_super) {
-    __extends(QingCore, _super);
-    function QingCore() {
-        var _this = _super.call(this) || this;
-        _this.pluginVariables = new Map();
-        _this.services = new Map();
-        return _this;
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    QingCore_1 = QingCore;
-    /**
-     * 将angular的service实例注入
-     * @param service AngularService
-     * @param serviceInstance AngularService Instance
-     */
-    QingCore.prototype.InjectService = function (service, serviceInstance) {
-        this.services.set(service.name, serviceInstance);
-    };
-    /**
-     * 获取某个Service实例
-     * @param service
-     */
-    QingCore.prototype.GetService = function (service) {
-        return this.services.get(service.name);
-    };
-    /****************************** Plugin Api *****************************/
-    QingCore.prototype.InstallPlugin = function (plugin) {
-        this.install(plugin);
-    };
-    QingCore.prototype.UninstallPlugin = function (pluginName) {
-        this.uninstall(pluginName);
-    };
-    QingCore.prototype.EnablePlugin = function (pluginName, pluginConfig) { };
-    QingCore.prototype.DisablePlugin = function (pluginName) {
-        var _this = this;
-        var variables = this.pluginVariables.get(pluginName);
-        if (variables && variables.length > 0) {
-            var observers = variables.map(function (varName) {
-                return _this.observerMap.get(varName);
-            });
-            observers.forEach(function (observer) {
-                if (observer) {
-                    observer.next(null);
-                    observer.complete();
-                }
-            });
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "electron-re", "qing-web-api-sdk", "@angular/core", "./events", "./plugin-store"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    var QingCore_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.QingCore = exports.Severity = void 0;
+    const electron_re_1 = require("electron-re");
+    const qing_web_api_sdk_1 = require("qing-web-api-sdk");
+    const core_1 = require("@angular/core");
+    const events_1 = require("./events");
+    const plugin_store_1 = require("./plugin-store");
+    var Severity;
+    (function (Severity) {
+        Severity["SUCCESS"] = "success";
+        Severity["ERROR"] = "error";
+        Severity["INFO"] = "info";
+    })(Severity = exports.Severity || (exports.Severity = {}));
+    let QingCore = QingCore_1 = class QingCore extends plugin_store_1.PluginStore {
+        constructor() {
+            super();
+            this.pluginVariables = new Map();
+            this.services = new Map();
         }
-    };
-    /*******************************************************************************/
-    /****************************** UI Api *****************************/
-    QingCore.prototype.Toast = function (severity, message) {
-        this.Emit(new Event(UIEvents.TOAST, { severity: severity, message: message }));
-    };
-    QingCore.prototype.Alert = function (message) {
-        this.Emit(new Event(UIEvents.ALERT, { message: message }));
-    };
-    QingCore.prototype.OpenDialog = function (componentName) {
-        this.Emit(new Event(UIEvents.OPEN_DIALOG, { componentName: componentName }));
-    };
-    QingCore.prototype.CloseDialog = function () {
-        this.Emit(new Event(UIEvents.CLOSE_DIALOG));
-    };
-    QingCore.prototype.LoadInMenu = function (componentName) {
-        this.Emit(new Event(UIEvents.LOAD_IN_MENU, { componentName: componentName }));
-    };
-    QingCore.prototype.LoadInSidebar = function (componentName) {
-        this.Emit(new Event(UIEvents.LOAD_IN_SIDEBAR, { componentName: componentName }));
-    };
-    QingCore.prototype.LoadInEditorArea = function (componentName) {
-        this.Emit(new Event(UIEvents.LOAD_IN_EDITORAREA, { componentName: componentName }));
-    };
-    QingCore.prototype.LoadInConsolePanel = function (componentName) {
-        this.Emit(new Event(UIEvents.LOAD_IN_PANEL, { componentName: componentName }));
-    };
-    QingCore.prototype.LoadInWidgetBar = function (componentName) {
-        this.Emit(new Event(UIEvents.LOAD_IN_WIDGETBAR, { componentName: componentName }));
-    };
-    QingCore.prototype.RegistVariable = function (pluginName, varName, data) {
-        var variables = this.pluginVariables.get(pluginName);
-        if (typeof variables === "object" && variables.length > 0) {
-            if (variables.indexOf(varName) < 0) {
+        /**
+         * 将angular的service实例注入
+         * @param service AngularService
+         * @param serviceInstance AngularService Instance
+         */
+        InjectService(service, serviceInstance) {
+            this.services.set(service.name, serviceInstance);
+        }
+        /**
+         * 获取某个Service实例
+         * @param service
+         */
+        GetService(service) {
+            return this.services.get(service.name);
+        }
+        /****************************** Plugin Api *****************************/
+        InstallPlugin(plugin) {
+            this.install(plugin);
+        }
+        UninstallPlugin(pluginName) {
+            this.uninstall(pluginName);
+        }
+        EnablePlugin(pluginName, pluginConfig) { }
+        DisablePlugin(pluginName) {
+            const variables = this.pluginVariables.get(pluginName);
+            if (variables && variables.length > 0) {
+                const observers = variables.map((varName) => this.observerMap.get(varName));
+                observers.forEach((observer) => {
+                    if (observer) {
+                        observer.next(null);
+                        observer.complete();
+                    }
+                });
+            }
+        }
+        /*******************************************************************************/
+        /****************************** UI Api *****************************/
+        Toast(severity, message) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.TOAST, { severity, message }));
+        }
+        Alert(message) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.ALERT, { message }));
+        }
+        OpenDialog(componentName) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.OPEN_DIALOG, { componentName }));
+        }
+        CloseDialog() {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.CLOSE_DIALOG));
+        }
+        LoadInMenu(componentName) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.LOAD_IN_MENU, { componentName }));
+        }
+        LoadInSidebar(componentName) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.LOAD_IN_SIDEBAR, { componentName }));
+        }
+        LoadInEditorArea(componentName) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.LOAD_IN_EDITORAREA, { componentName }));
+        }
+        LoadInConsolePanel(componentName) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.LOAD_IN_PANEL, { componentName }));
+        }
+        LoadInWidgetBar(componentName) {
+            this.Emit(new plugin_store_1.Event(events_1.UIEvents.LOAD_IN_WIDGETBAR, { componentName }));
+        }
+        RegistVariable(pluginName, varName, data) {
+            const variables = this.pluginVariables.get(pluginName);
+            if (typeof variables === "object" && variables.length > 0) {
+                if (variables.indexOf(varName) < 0) {
+                    this.registObserver(varName, data);
+                }
+            }
+            else {
+                this.pluginVariables.set(pluginName, [varName]);
                 this.registObserver(varName, data);
             }
         }
-        else {
-            this.pluginVariables.set(pluginName, [varName]);
-            this.registObserver(varName, data);
+        GetVariable(varName) {
+            return this.getObserver(varName);
         }
-    };
-    QingCore.prototype.GetVariable = function (varName) {
-        return this.getObserver(varName);
-    };
-    /*******************************************************************************/
-    /****************************** Storage Api *****************************/
-    QingCore.prototype.Set = function (key, data) {
-        if (typeof data === "object") {
-            localStorage.setItem(key, JSON.stringify(data));
+        /*******************************************************************************/
+        /****************************** Storage Api *****************************/
+        Set(key, data) {
+            if (typeof data === "object") {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+            else {
+                localStorage.setItem(key, data);
+            }
         }
-        else {
-            localStorage.setItem(key, data);
+        Get(key) {
+            const data = localStorage.getItem(key);
+            if (!data)
+                return null;
+            try {
+                return JSON.parse(data);
+            }
+            catch (error) {
+                return data;
+            }
         }
-    };
-    QingCore.prototype.Get = function (key) {
-        var data = localStorage.getItem(key);
-        if (!data)
-            return null;
-        try {
-            return JSON.parse(data);
+        Remove(key) {
+            localStorage.removeItem(key);
         }
-        catch (error) {
-            return data;
+        /*******************************************************************************/
+        /****************************** Event Listener Api *****************************/
+        Emit(event) {
+            this.dispatchEvent(event);
         }
-    };
-    QingCore.prototype.Remove = function (key) {
-        localStorage.removeItem(key);
-    };
-    /*******************************************************************************/
-    /****************************** Event Listener Api *****************************/
-    QingCore.prototype.Emit = function (event) {
-        this.dispatchEvent(event);
-    };
-    QingCore.prototype.On = function (eventName, listener) {
-        this.addEventListener(eventName, listener);
-    };
-    QingCore.prototype.Once = function (eventName, listener) {
-        this.addOnceEventListener(eventName, listener);
-    };
-    QingCore.prototype.Off = function (eventName, listener) {
-        this.removeListener(eventName, listener);
-    };
-    QingCore.prototype.OffAll = function () {
-        this.removeAllEvents();
-    };
-    /*******************************************************************************/
-    QingCore.prototype.Invoke = function (funcName) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
+        On(eventName, listener) {
+            this.addEventListener(eventName, listener);
         }
-        return this.execFunction.apply(this, __spreadArrays([funcName], args));
-    };
-    QingCore.prototype.Bind = function (funcName, fn) {
-        this.addFunction(funcName, fn);
-    };
-    QingCore.prototype.UnBind = function (funcName) {
-        this.removeFunction(funcName);
-    };
-    /****************************** IO Api *****************************************/
-    QingCore.prototype.ListDir = function (dir) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.LISTDIR, {
-                dir: dir,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        Once(eventName, listener) {
+            this.addOnceEventListener(eventName, listener);
+        }
+        Off(eventName, listener) {
+            this.removeListener(eventName, listener);
+        }
+        OffAll() {
+            this.removeAllEvents();
+        }
+        /*******************************************************************************/
+        Invoke(funcName, ...args) {
+            return this.execFunction(funcName, ...args);
+        }
+        Bind(funcName, fn) {
+            this.addFunction(funcName, fn);
+        }
+        UnBind(funcName) {
+            this.removeFunction(funcName);
+        }
+        /****************************** IO Api *****************************************/
+        ListDir(dir) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.LISTDIR, {
+                    dir,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.RemoveDir = function (dir) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.REMOVEDIR, { dir: dir })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        RemoveDir(dir) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.REMOVEDIR, { dir })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.ReadFile = function (file) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.READFILE, {
-                file: file,
-                options: { encoding: "utf8" },
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        ReadFile(file) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.READFILE, {
+                    file,
+                    options: { encoding: "utf8" },
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.WriteFile = function (file, data) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.WRITEFILE, {
-                file: file,
-                data: data,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        WriteFile(file, data) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.WRITEFILE, {
+                    file,
+                    data,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.RemoveFile = function (file, data) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.REMOVEFILE, {
-                file: file,
-                data: data,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        RemoveFile(file, data) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.REMOVEFILE, {
+                    file,
+                    data,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.ReadJson = function (path) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.READJSON, {
-                path: path,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        ReadJson(path) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.READJSON, {
+                    path,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.WriteJson = function (path, data) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.WRITEJSON, {
-                path: path,
-                data: data,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        WriteJson(path, data) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.WRITEJSON, {
+                    path,
+                    data,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.DownloadFile = function (url, output) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.DOWNLOADFILE, {
-                url: url,
-                output: output,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        DownloadFile(url, output) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.DOWNLOADFILE, {
+                    url,
+                    output,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.UploadFile = function (file) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.UPLOADFILE, {
-                file: file,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        UploadFile(file) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.UPLOADFILE, {
+                    file,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.CopyFiles = function (files) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.COPYFILES, {
-                files: files,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        CopyFiles(source, dest) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.COPYFILES, {
+                    source,
+                    dest
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.ZipFiles = function (files) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.ZIPFILES, {
-                files: files,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        ZipFiles(files) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.ZIPFILES, {
+                    files,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    QingCore.prototype.Unzip = function (file) {
-        return new Promise(function (resolve, reject) {
-            msgc
-                .invoke(QingCore_1.IoServiceName, IOEvents.UNZIP, {
-                file: file,
-            })
-                .then(function (res) {
-                var error = res.error, data = res.data;
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(data);
+        }
+        Unzip(file) {
+            return new Promise((resolve, reject) => {
+                electron_re_1.EreMessageChannel
+                    .invoke(QingCore_1.IoServiceName, events_1.IOEvents.UNZIP, {
+                    file,
+                })
+                    .then((res) => {
+                    const { error, data } = res;
+                    if (error) {
+                        reject(error);
+                        return;
+                    }
+                    resolve(data);
+                });
             });
-        });
-    };
-    Object.defineProperty(QingCore.prototype, "WebServiceSdk", {
+        }
         /*******************************************************************************/
         /****************************** Web Service Api *****************************************/
-        get: function () {
-            return QingWebApiSdk.getInstance();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    /*******************************************************************************/
-    QingCore.prototype.Destroy = function () {
-        var observers = Array.from(this.observerMap.values());
-        observers.forEach(function (observer) {
-            observer.next(null);
-            observer.complete();
-        });
-        _super.prototype.removeAllListeners.call(this);
-        this.OffAll();
+        get WebServiceSdk() {
+            return qing_web_api_sdk_1.QingWebApiSdk.getInstance();
+        }
+        /*******************************************************************************/
+        Destroy() {
+            const observers = Array.from(this.observerMap.values());
+            observers.forEach((observer) => {
+                observer.next(null);
+                observer.complete();
+            });
+            super.removeAllListeners();
+            this.OffAll();
+        }
     };
-    var QingCore_1;
     QingCore.IoServiceName = "io-service";
     QingCore = QingCore_1 = __decorate([
-        Injectable({
+        core_1.Injectable({
             providedIn: "root",
         }),
         __metadata("design:paramtypes", [])
     ], QingCore);
-    return QingCore;
-}(PluginStore));
-export { QingCore };
+    exports.QingCore = QingCore;
+});
 //# sourceMappingURL=qing-core.js.map

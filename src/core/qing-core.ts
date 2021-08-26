@@ -360,11 +360,12 @@ export class QingCore extends PluginStore {
     });
   }
 
-  public CopyFiles(files: string) {
+  public CopyFiles(source: string, dest: string) {
     return new Promise((resolve, reject) => {
       msgc
         .invoke(QingCore.IoServiceName, IOEvents.COPYFILES, {
-          files,
+          source,
+          dest
         })
         .then((res: MsgcResponse) => {
           const { error, data } = res;
