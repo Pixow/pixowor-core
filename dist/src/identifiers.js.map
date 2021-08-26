@@ -1,1 +1,0 @@
-{"version":3,"file":"identifiers.js","sourceRoot":"","sources":["../../src/identifiers.ts"],"names":[],"mappings":";;;;;;;;;;;IAAA,MAAM,kBAAkB,GAAG;QACzB,QAAQ,EAAE,MAAM,CAAC,GAAG,CAAC,UAAU,CAAC;KACjC,CAAC;IAEF,kBAAe,kBAAkB,CAAC","sourcesContent":["const SERVICE_IDENTIFIER = {\r\n  QINGCORE: Symbol.for(\"QingCore\"),\r\n};\r\n\r\nexport default SERVICE_IDENTIFIER;\r\n"]}

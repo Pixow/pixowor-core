@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { EventEmitter } from "events";
 import { BehaviorSubject } from "rxjs";
 import { Plugin } from "./plugin";
