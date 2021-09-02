@@ -1,15 +1,16 @@
 export enum UIEvents {
-	TOAST = "Toast",
-	ALERT = "Alert",
-	OPEN_DIALOG = "OpenDialog",
-	CLOSE_DIALOG = "CloseDialog",
-	INSERT_MENU = "InsertMenu",
-	ADD_STATUS = "AddStatus",
-	LOAD_IN_MENU = "LoadInMenu",
-	LOAD_IN_SIDEBAR = "LoadInSidebar",
-	LOAD_IN_EDITORAREA = "LoadInEditorarea",
-	LOAD_IN_PANEL = "LoadInPanel",
-	LOAD_IN_WIDGETBAR = "LoadInWidgetbar"
+  TOAST = "Toast",
+  ALERT = "Alert",
+  OPEN_DIALOG = "OpenDialog",
+  CLOSE_DIALOG = "CloseDialog",
+  INSERT_MENU = "InsertMenu",
+  ADD_STATUS = "AddStatus",
+  ACTIVATE_IN_MENU = "ActivateInMenu",
+  DEACTIVATE_IN_MENU = "DeactivateInMenu",
+  LOAD_IN_SIDEBAR = "LoadInSidebar",
+  LOAD_IN_EDITORAREA = "LoadInEditorarea",
+  LOAD_IN_PANEL = "LoadInPanel",
+  LOAD_IN_WIDGETBAR = "LoadInWidgetbar",
 }
 
 
@@ -26,4 +27,18 @@ export enum IOEvents {
   COPYFILES = "copy-files",
   ZIPFILES = "zip-files",
   UNZIP = "unzip",
+
+  UPLOADFILE_REPLY = "upload-file_reply",
+  DOWNLOADFILE_REPLY= "download-file_reply",
+}
+
+export enum RendererFunctions {
+  REGIST_COMPONENT = "registComponent",
+  GET_COMPONENT = "getComponent",
+  REGIST_PLACEMENT_COMPONENTS = "registPlacementComponents",
+  GET_PLACEMENT_COMPONENTS = "getComponentsInPlacement",
+}
+
+export enum RendererEvents {
+  UPDATE_SLOT_VIEW = "updateSlotView"
 }

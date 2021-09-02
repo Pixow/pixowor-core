@@ -2,7 +2,7 @@
 
 
 declare module "electron-re" {
-  export class EreMessageChannel {
+  export class MessageChannel {
     static invoke: (...args: any) => Promise<any>;
   }
 }

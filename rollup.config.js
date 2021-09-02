@@ -6,10 +6,16 @@ import json from "@rollup/plugin-json";
 export default {
   input: "src/index.ts",
   output: {
+    sourcemap: false,
     file: "dist/index.js",
     format: "umd",
     name: "qingCore",
   },
-  plugins: [typescript({tsconfig: "./tsconfig.json"}), json(), resolve(), commonjs()],
-  external: ["@angular/core", "events", "rxjs", "electron-re"]
+  plugins: [
+    typescript({ sourceMap: true, tsconfig: "./tsconfig.json" }),
+    json(),
+    resolve(),
+    commonjs(),
+  ],
+  external: ["@angular/core", "events", "rxjs", "electron-re"],
 };

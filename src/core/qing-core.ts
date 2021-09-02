@@ -1,10 +1,14 @@
-import { EreMessageChannel as msgc } from "electron-re";
+import { MessageChannel as msgc } from "electron-re";
 import { QingWebApiSdk } from "qing-web-api-sdk";
-import { Injectable } from "@angular/core";
-import { IOEvents, UIEvents } from "./events";
+import { Component, Injectable, Type } from "@angular/core";
+import {
+  IOEvents,
+  RendererEvents,
+  RendererFunctions,
+  UIEvents,
+} from "./events";
 import { Event, PluginStore } from "./plugin-store";
 import { Plugin } from "./plugin";
-
 
 export enum Severity {
   SUCCESS = "success",
@@ -19,6 +23,26 @@ export type MsgcResponse = {
 
 export declare type Constructable<T> = new (...args: any[]) => T;
 
+export type Environment = {
+  production: boolean;
+  environment: string;
+  bucket: string;
+  API_URL: string;
+  WEB_RESOURCE_URI: string;
+  TEST_GAME_CONFIG_IP_MOBILE: string;
+  TEST_GAME_CONFIG_PORT_MOBILE: number;
+  APP_DATA_PATH: string;
+  USER_DATA_PATH: string;
+  TEMP_PATH: string;
+};
+
+export interface FileStat {
+  type: string;
+  path: string;
+  file: string;
+  files?: FileStat[];
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -26,9 +50,19 @@ export class QingCore extends PluginStore {
   static IoServiceName: string = "io-service";
   private pluginVariables = new Map<string, string[]>();
   private services = new Map<string, any>();
+  private environment: Environment;
 
   constructor() {
     super();
+  }
+
+  /****************************** Environment Variables Api *****************************/
+  public set Environment(env: Environment) {
+    this.environment = env;
+  }
+
+  public get Environment(): Environment {
+    return this.environment;
   }
 
   /**
@@ -42,7 +76,7 @@ export class QingCore extends PluginStore {
 
   /**
    * 获取某个Service实例
-   * @param service 
+   * @param service
    */
   public GetService<T>(service: Constructable<T>) {
     return this.services.get((service as any).name) as T;
@@ -80,6 +114,28 @@ export class QingCore extends PluginStore {
   /*******************************************************************************/
 
   /****************************** UI Api *****************************/
+  public RegistComponent(componentName: string, component: Type<Component>) {
+    this.Invoke(RendererFunctions.REGIST_COMPONENT, componentName, component);
+  }
+
+  public GetComponent(componentName: string) {
+    this.Invoke(RendererFunctions.GET_COMPONENT, componentName);
+  }
+
+  public RegistPlacementComponents(
+    placement: string,
+    component: Type<Component>
+  ) {
+    this.Invoke(
+      RendererFunctions.REGIST_PLACEMENT_COMPONENTS,
+      placement,
+      component
+    );
+  }
+
+  public GetPlacementComponents(placement: string) {
+    this.Invoke(RendererFunctions.GET_PLACEMENT_COMPONENTS, placement);
+  }
 
   public Toast(severity: Severity, message: string) {
     this.Emit(new Event(UIEvents.TOAST, { severity, message }));
@@ -97,8 +153,19 @@ export class QingCore extends PluginStore {
     this.Emit(new Event(UIEvents.CLOSE_DIALOG));
   }
 
-  public LoadInMenu(componentName: string) {
-    this.Emit(new Event(UIEvents.LOAD_IN_MENU, { componentName }));
+  public ActivateInMenu(
+    col: number,
+    insertIndex: number,
+    label: string,
+    cb: Function
+  ) {
+    this.Emit(
+      new Event(UIEvents.ACTIVATE_IN_MENU, { col, insertIndex, label, cb })
+    );
+  }
+
+  public DeactivateInMenu(col: number, insertIndex: number) {
+    this.Emit(new Event(UIEvents.DEACTIVATE_IN_MENU, { col, insertIndex }));
   }
 
   public LoadInSidebar(componentName: string) {
@@ -174,11 +241,11 @@ export class QingCore extends PluginStore {
   }
 
   public Off(eventName: string, listener: (event: Event) => void) {
-    this.removeListener(eventName, listener)
+    this.removeListener(eventName, listener);
   }
 
   public OffAll() {
-    this.removeAllEvents()
+    this.removeAllEvents();
   }
   /*******************************************************************************/
 
@@ -195,7 +262,7 @@ export class QingCore extends PluginStore {
   }
 
   /****************************** IO Api *****************************************/
-  public ListDir(dir: string) {
+  public ListDir(dir: string): Promise<FileStat[]> {
     return new Promise((resolve, reject) => {
       msgc
         .invoke(QingCore.IoServiceName, IOEvents.LISTDIR, {
@@ -304,7 +371,7 @@ export class QingCore extends PluginStore {
     });
   }
 
-  public WriteJson(path: string, data: string) {
+  public WriteJson(path: string, data: any) {
     return new Promise((resolve, reject) => {
       msgc
         .invoke(QingCore.IoServiceName, IOEvents.WRITEJSON, {
@@ -342,11 +409,19 @@ export class QingCore extends PluginStore {
     });
   }
 
-  public UploadFile(file: string) {
-    return new Promise((resolve, reject) => {
+  public UploadFile(filePath: string, fileName: string) {
+    return new Promise(async (resolve, reject) => {
+      const qiniuTokenRes = await this.WebServiceSdk.util.getQiniuToken({
+        name: fileName,
+      });
+
+      const { token } = qiniuTokenRes.data;
+
       msgc
         .invoke(QingCore.IoServiceName, IOEvents.UPLOADFILE, {
-          file,
+          filePath,
+          fileName,
+          token,
         })
         .then((res: MsgcResponse) => {
           const { error, data } = res;
@@ -358,6 +433,10 @@ export class QingCore extends PluginStore {
           resolve(data);
         });
     });
+  }
+
+  public UploadFiles(files: string[]) {
+    return new Promise((resolve, reject) => {});
   }
 
   public CopyFiles(source: string, dest: string) {
@@ -365,7 +444,7 @@ export class QingCore extends PluginStore {
       msgc
         .invoke(QingCore.IoServiceName, IOEvents.COPYFILES, {
           source,
-          dest
+          dest,
         })
         .then((res: MsgcResponse) => {
           const { error, data } = res;
@@ -379,11 +458,12 @@ export class QingCore extends PluginStore {
     });
   }
 
-  public ZipFiles(files: string) {
+  public ZipFiles(files: FileStat[], folderName: string) {
     return new Promise((resolve, reject) => {
       msgc
         .invoke(QingCore.IoServiceName, IOEvents.ZIPFILES, {
           files,
+          folderName,
         })
         .then((res: MsgcResponse) => {
           const { error, data } = res;
@@ -422,6 +502,10 @@ export class QingCore extends PluginStore {
   public get WebServiceSdk() {
     return QingWebApiSdk.getInstance();
   }
+
+  public InitToken(token: string) {
+    this.WebServiceSdk.setToken(token);
+  }
   /*******************************************************************************/
 
   public Destroy() {
@@ -433,6 +517,6 @@ export class QingCore extends PluginStore {
 
     super.removeAllListeners();
 
-    this.OffAll()
+    this.OffAll();
   }
 }
