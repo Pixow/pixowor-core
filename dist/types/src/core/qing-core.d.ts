@@ -23,6 +23,7 @@ export declare type Environment = {
     APP_DATA_PATH: string;
     USER_DATA_PATH: string;
     TEMP_PATH: string;
+    APP_PATH: String;
 };
 export interface FileStat {
     type: string;
@@ -39,6 +40,10 @@ export declare class QingCore extends PluginStore {
     /****************************** Environment Variables Api *****************************/
     set Environment(env: Environment);
     get Environment(): Environment;
+    /********************************** I18N *******************************/
+    InstallI18n(translateObjs: {
+        [k: string]: object;
+    }): Promise<unknown>;
     /**
      * 将angular的service实例注入
      * @param service AngularService

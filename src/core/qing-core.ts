@@ -34,6 +34,7 @@ export type Environment = {
   APP_DATA_PATH: string;
   USER_DATA_PATH: string;
   TEMP_PATH: string;
+  APP_PATH: String;
 };
 
 export interface FileStat {
@@ -63,6 +64,23 @@ export class QingCore extends PluginStore {
 
   public get Environment(): Environment {
     return this.environment;
+  }
+
+  /********************************** I18N *******************************/
+  public InstallI18n(translateObjs: { [k: string]: object }) {
+    return new Promise((resolve, reject) => {
+      msgc
+        .invoke(QingCore.IoServiceName, IOEvents.INSTALLI18N, { translateObjs })
+        .then((res: MsgcResponse) => {
+          const { error, data } = res;
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          resolve(data);
+        });
+    });
   }
 
   /**

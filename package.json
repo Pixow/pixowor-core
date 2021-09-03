@@ -1,13 +1,14 @@
 {
   "name": "qing-core",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "main": "dist/src/index.js",
   "types": "dist/types/src/index.d.ts",
   "author": "moJiXiang",
   "license": "MIT",
   "scripts": {
     "clear": "rimraf dist",
-    "build": "yarn clear && tsc -p ./tsconfig.json"
+    "build": "yarn clear && tsc -p ./tsconfig.json",
+    "publish": "npm publish"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",

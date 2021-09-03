@@ -27,9 +27,12 @@ export enum IOEvents {
   COPYFILES = "copy-files",
   ZIPFILES = "zip-files",
   UNZIP = "unzip",
+  GETSETTINGS = "get-settings",
 
   UPLOADFILE_REPLY = "upload-file_reply",
-  DOWNLOADFILE_REPLY= "download-file_reply",
+  DOWNLOADFILE_REPLY = "download-file_reply",
+
+  INSTALLI18N = "install-i18n"
 }
 
 export enum RendererFunctions {

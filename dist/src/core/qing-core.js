@@ -94,6 +94,21 @@ var QingCore = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    /********************************** I18N *******************************/
+    QingCore.prototype.InstallI18n = function (translateObjs) {
+        return new Promise(function (resolve, reject) {
+            msgc
+                .invoke(QingCore_1.IoServiceName, IOEvents.INSTALLI18N, { translateObjs: translateObjs })
+                .then(function (res) {
+                var error = res.error, data = res.data;
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(data);
+            });
+        });
+    };
     /**
      * 将angular的service实例注入
      * @param service AngularService

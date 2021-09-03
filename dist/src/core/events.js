@@ -27,8 +27,10 @@ export var IOEvents;
     IOEvents["COPYFILES"] = "copy-files";
     IOEvents["ZIPFILES"] = "zip-files";
     IOEvents["UNZIP"] = "unzip";
+    IOEvents["GETSETTINGS"] = "get-settings";
     IOEvents["UPLOADFILE_REPLY"] = "upload-file_reply";
     IOEvents["DOWNLOADFILE_REPLY"] = "download-file_reply";
+    IOEvents["INSTALLI18N"] = "install-i18n";
 })(IOEvents || (IOEvents = {}));
 export var RendererFunctions;
 (function (RendererFunctions) {
