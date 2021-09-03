@@ -11,6 +11,7 @@ export abstract class Plugin {
   }
 
   abstract getDependencies(): string[];
+  async prepare() {};
   abstract activate(): void;
   abstract deactivate(): void;
 }

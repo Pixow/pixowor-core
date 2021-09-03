@@ -44,7 +44,7 @@ export class PluginStore extends EventEmitter {
     return Array.from(this._pluginMap.values());
   }
 
-  install(plugin: Plugin) {
+  async prepare(plugin: Plugin) {
     const pluginNameAndVer = plugin.getPluginIdentify();
     const [pluginName, _] = pluginNameAndVer.split("@");
     const pluginDependencies = plugin.getDependencies() || [];
@@ -77,13 +77,17 @@ export class PluginStore extends EventEmitter {
 
     if (installErrors.length === 0) {
       this._pluginMap.set(pluginName, plugin);
-      plugin.activate();
+      await plugin.prepare();
     } else {
       installErrors.forEach((err) => console.error(err));
     }
   }
 
-  uninstall(pluginName: string) {
+  activate(plugin: Plugin) {
+    plugin.activate();
+  }
+
+  deactivate(pluginName: string) {
     let plugin = this._pluginMap.get(pluginName);
 
     if (plugin) {

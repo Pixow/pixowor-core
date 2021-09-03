@@ -44,6 +44,8 @@ export declare class QingCore extends PluginStore {
     InstallI18n(translateObjs: {
         [k: string]: object;
     }): Promise<unknown>;
+    SetDefaultLang(lang: string): void;
+    GetDefaultLang(): Promise<unknown>;
     /**
      * 将angular的service实例注入
      * @param service AngularService
@@ -56,11 +58,9 @@ export declare class QingCore extends PluginStore {
      */
     GetService<T>(service: Constructable<T>): T;
     /****************************** Plugin Api *****************************/
-    InstallPlugin(plugin: Plugin): void;
-    UninstallPlugin(pluginName: string): void;
-    EnablePlugin(pluginName: string, pluginConfig: {
-        [k: string]: any;
-    }): void;
+    PreparePlugins(plugins: Plugin[]): Promise<any>;
+    DeactivatePlugin(pluginNames: string[]): void;
+    ActivatePlugins(plugins: Plugin[]): void;
     DisablePlugin(pluginName: string): void;
     /*******************************************************************************/
     /****************************** UI Api *****************************/

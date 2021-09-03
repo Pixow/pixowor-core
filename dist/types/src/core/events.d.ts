@@ -28,7 +28,9 @@ export declare enum IOEvents {
     GETSETTINGS = "get-settings",
     UPLOADFILE_REPLY = "upload-file_reply",
     DOWNLOADFILE_REPLY = "download-file_reply",
-    INSTALLI18N = "install-i18n"
+    INSTALLI18N = "install-i18n",
+    SET_DEFAULT_LANG = "set-default-lang",
+    GET_DEFAULT_LANG = "get-default-lang"
 }
 export declare enum RendererFunctions {
     REGIST_COMPONENT = "registComponent",

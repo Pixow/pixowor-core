@@ -18,8 +18,9 @@ export declare class PluginStore extends EventEmitter {
     get observerMap(): Map<string, BehaviorSubject<any>>;
     private dependencyValid;
     getInstalledPlugins(): Plugin[];
-    install(plugin: Plugin): void;
-    uninstall(pluginName: string): void;
+    prepare(plugin: Plugin): Promise<void>;
+    activate(plugin: Plugin): void;
+    deactivate(pluginName: string): void;
     addFunction(key: string, fn: any): void;
     execFunction(key: string, ...args: any): any;
     removeFunction(key: string): void;

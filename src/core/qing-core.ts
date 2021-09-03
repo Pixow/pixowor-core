@@ -83,6 +83,26 @@ export class QingCore extends PluginStore {
     });
   }
 
+  public SetDefaultLang(lang: string) {
+    msgc.invoke(QingCore.IoServiceName, IOEvents.SET_DEFAULT_LANG, {lang})
+  }
+
+  public GetDefaultLang() {
+     return new Promise((resolve, reject) => {
+       msgc
+         .invoke(QingCore.IoServiceName, IOEvents.GET_DEFAULT_LANG, {})
+         .then((res: MsgcResponse) => {
+           const { error, data } = res;
+           if (error) {
+             reject(error);
+             return;
+           }
+
+           resolve(data);
+         });
+     });
+  }
+
   /**
    * 将angular的service实例注入
    * @param service AngularService
@@ -102,17 +122,33 @@ export class QingCore extends PluginStore {
 
   /****************************** Plugin Api *****************************/
 
-  public InstallPlugin(plugin: Plugin) {
-    this.install(plugin);
+  public PreparePlugins(plugins: Plugin[]): Promise<any> {
+    let tasks: Promise<any>[] = []
+    plugins.forEach(plugin => {
+      tasks.push(this.prepare(plugin))
+    })
+
+    return Promise.all(tasks);
+  }
+  
+
+  public DeactivatePlugin(pluginNames: string[]) {
+    pluginNames.forEach(pluginName => {
+      this.deactivate(pluginName);
+    })
+  }
+  
+
+  public ActivatePlugins(plugins: Plugin[]) {
+    plugins.forEach(plugin => {
+      this.activate(plugin)
+    })
   }
 
-  public UninstallPlugin(pluginName: string) {
-    this.uninstall(pluginName);
-  }
-
-  public EnablePlugin(pluginName: string, pluginConfig: { [k: string]: any }) {}
-
+  // TODO: deactive variables
   public DisablePlugin(pluginName: string) {
+    // 将插件注册的变量清空
+    this.deactivate(pluginName)
     const variables = this.pluginVariables.get(pluginName);
 
     if (variables && variables.length > 0) {

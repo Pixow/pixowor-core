@@ -109,6 +109,23 @@ var QingCore = /** @class */ (function (_super) {
             });
         });
     };
+    QingCore.prototype.SetDefaultLang = function (lang) {
+        msgc.invoke(QingCore_1.IoServiceName, IOEvents.SET_DEFAULT_LANG, { lang: lang });
+    };
+    QingCore.prototype.GetDefaultLang = function () {
+        return new Promise(function (resolve, reject) {
+            msgc
+                .invoke(QingCore_1.IoServiceName, IOEvents.GET_DEFAULT_LANG, {})
+                .then(function (res) {
+                var error = res.error, data = res.data;
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(data);
+            });
+        });
+    };
     /**
      * 将angular的service实例注入
      * @param service AngularService
@@ -125,15 +142,31 @@ var QingCore = /** @class */ (function (_super) {
         return this.services.get(service.name);
     };
     /****************************** Plugin Api *****************************/
-    QingCore.prototype.InstallPlugin = function (plugin) {
-        this.install(plugin);
+    QingCore.prototype.PreparePlugins = function (plugins) {
+        var _this = this;
+        var tasks = [];
+        plugins.forEach(function (plugin) {
+            tasks.push(_this.prepare(plugin));
+        });
+        return Promise.all(tasks);
     };
-    QingCore.prototype.UninstallPlugin = function (pluginName) {
-        this.uninstall(pluginName);
+    QingCore.prototype.DeactivatePlugin = function (pluginNames) {
+        var _this = this;
+        pluginNames.forEach(function (pluginName) {
+            _this.deactivate(pluginName);
+        });
     };
-    QingCore.prototype.EnablePlugin = function (pluginName, pluginConfig) { };
+    QingCore.prototype.ActivatePlugins = function (plugins) {
+        var _this = this;
+        plugins.forEach(function (plugin) {
+            _this.activate(plugin);
+        });
+    };
+    // TODO: deactive variables
     QingCore.prototype.DisablePlugin = function (pluginName) {
         var _this = this;
+        // 将插件注册的变量清空
+        this.deactivate(pluginName);
         var variables = this.pluginVariables.get(pluginName);
         if (variables && variables.length > 0) {
             var observers = variables.map(function (varName) {

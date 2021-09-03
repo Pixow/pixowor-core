@@ -1,11 +1,11 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add qing-web-api-sdk
+  C:\Program Files\nodejs\node.exe C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js publish
 
 PATH: 
-  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;D:\Gradle\bin;D:\apache-jmeter-5.4.1\bin;D:\Go\bin;C:\Users\moJiXiang\AppData\Roaming\Python\Python39\Scripts;C:\Users\moJiXiang\kubectl.exe;D:\Kubernetes\Minikube;;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\dotnet\;C:\Users\moJiXiang\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\moJiXiang\AppData\Local\Programs\Python\Python39\;C:\Users\moJiXiang\AppData\Local\Microsoft\WindowsApps;D:\SOFTWARE\Microsoft VS Code\bin;C:\Users\moJiXiang\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Users\moJiXiang\AppData\Roaming\npm;D:\SOFTWARE\Git\cmd;C:\Users\moJiXiang\go\bin
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Python39\Scripts\;C:\Python39\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;D:\Gradle\bin;D:\apache-jmeter-5.4.1\bin;D:\Go\bin;C:\Users\moJiXiang\AppData\Roaming\Python\Python39\Scripts;C:\Users\moJiXiang\kubectl.exe;D:\Kubernetes\Minikube;;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\moJiXiang\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\moJiXiang\AppData\Local\Programs\Python\Python39\;C:\Users\moJiXiang\AppData\Local\Microsoft\WindowsApps;D:\SOFTWARE\Microsoft VS Code\bin;C:\Users\moJiXiang\AppData\Local\hyper\app-3.0.2\resources\bin;C:\Users\moJiXiang\AppData\Roaming\npm;D:\SOFTWARE\Git\cmd;C:\Users\moJiXiang\go\bin
 
 Yarn version: 
-  1.22.10
+  1.22.11
 
 Node version: 
   14.15.4
@@ -14,39 +14,50 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.npm.taobao.org/qing-web-api-sdk: Not found
-      at Request.params.callback [as _callback] (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66988:18)
-      at Request.self.callback (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140662:22)
-      at Request.emit (events.js:315:20)
-      at Request.<anonymous> (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141634:10)
-      at Request.emit (events.js:315:20)
-      at IncomingMessage.<anonymous> (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141556:12)
-      at Object.onceWrapper (events.js:421:28)
-      at IncomingMessage.emit (events.js:327:22)
-      at endReadableNT (internal/streams/readable.js:1327:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+  Error: canceled
+      at Interface.<anonymous> (C:\Users\moJiXiang\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:137023:13)
+      at Interface.emit (events.js:315:20)
+      at Interface._ttyWrite (readline.js:875:16)
+      at ReadStream.onkeypress (readline.js:213:10)
+      at ReadStream.emit (events.js:315:20)
+      at emitKeys (internal/readline/utils.js:345:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1144:36)
+      at ReadStream.emit (events.js:315:20)
+      at addChunk (internal/streams/readable.js:309:12)
 
 npm manifest: 
   {
     "name": "qing-core",
-    "version": "1.0.10",
+    "version": "1.0.15",
     "main": "dist/src/index.js",
     "types": "dist/types/src/index.d.ts",
     "author": "moJiXiang",
     "license": "MIT",
     "scripts": {
       "clear": "rimraf dist",
-      "build": "yarn clear && tsc -p ./tsconfig.json"
+      "build": "yarn clear && tsc -p ./tsconfig.json",
+      "publish": "npm publish"
     },
     "devDependencies": {
+      "@rollup/plugin-commonjs": "^20.0.0",
+      "@rollup/plugin-json": "^4.1.0",
+      "@rollup/plugin-node-resolve": "^13.0.4",
+      "@rollup/plugin-typescript": "^8.2.5",
+      "@types/events": "^3.0.0",
+      "@types/semver": "^7.3.8",
       "rimraf": "^3.0.2",
       "rollup": "^2.48.0",
+      "rollup-plugin-polyfill-node": "^0.7.0",
       "typescript": "4.0.2"
     },
     "dependencies": {
-      "angular-pluggable": "^1.0.10",
-      "reflect-metadata": "^0.1.13",
-      "typedi": "^0.10.0"
+      "@angular/core": "^12.2.2",
+      "electron-re": "^1.0.10",
+      "events": "^3.3.0",
+      "qing-web-api-sdk": "git+ssh://git@code.apowo.com:PixelPai/qing-web-api-sdk.git#master",
+      "rxjs": "6.6.3",
+      "semver": "^7.3.5"
     },
     "files": [
       "dist"
@@ -61,28 +72,116 @@ Lockfile:
   # yarn lockfile v1
   
   
-  "@angular/common@11.2.3":
-    version "11.2.3"
-    resolved "https://registry.nlark.com/@angular/common/download/@angular/common-11.2.3.tgz?cache=0&sync_timestamp=1629323698073&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40angular%2Fcommon%2Fdownload%2F%40angular%2Fcommon-11.2.3.tgz#e71d645fb6bdef9463f23a551cc072ef276c1d84"
-    integrity sha1-5x1kX7a975Rj8jpVHMBy7ydsHYQ=
+  "@angular/core@^12.2.2":
+    version "12.2.2"
+    resolved "https://registry.nlark.com/@angular/core/download/@angular/core-12.2.2.tgz?cache=0&sync_timestamp=1629323690602&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40angular%2Fcore%2Fdownload%2F%40angular%2Fcore-12.2.2.tgz#bf10931a059ee9e95ecbc3171303f2304958a601"
+    integrity sha1-vxCTGgWe6eley8MXEwPyMElYpgE=
     dependencies:
-      tslib "^2.0.0"
+      tslib "^2.2.0"
   
-  "@angular/core@11.2.3":
-    version "11.2.3"
-    resolved "https://registry.nlark.com/@angular/core/download/@angular/core-11.2.3.tgz?cache=0&sync_timestamp=1629323690602&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40angular%2Fcore%2Fdownload%2F%40angular%2Fcore-11.2.3.tgz#7dd59f35e0b2410543a61be6048c474c18a43f40"
-    integrity sha1-fdWfNeCyQQVDphvmBIxHTBikP0A=
+  "@babel/runtime@^7.12.5":
+    version "7.15.3"
+    resolved "https://registry.nlark.com/@babel/runtime/download/@babel/runtime-7.15.3.tgz?cache=0&sync_timestamp=1628666503436&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.15.3.tgz#2e1c2880ca118e5b2f9988322bd8a7656a32502b"
+    integrity sha1-LhwogMoRjlsvmYgyK9inZWoyUCs=
     dependencies:
-      tslib "^2.0.0"
+      regenerator-runtime "^0.13.4"
   
-  angular-pluggable@^1.0.10:
-    version "1.0.10"
-    resolved "https://registry.nlark.com/angular-pluggable/download/angular-pluggable-1.0.10.tgz#d53c0e799a1850c4be49d543e4a0b0b397abd090"
-    integrity sha1-1TwOeZoYUMS+SdVD5KCws5er0JA=
+  "@rollup/plugin-commonjs@^20.0.0":
+    version "20.0.0"
+    resolved "https://registry.nlark.com/@rollup/plugin-commonjs/download/@rollup/plugin-commonjs-20.0.0.tgz?cache=0&sync_timestamp=1627649915187&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40rollup%2Fplugin-commonjs%2Fdownload%2F%40rollup%2Fplugin-commonjs-20.0.0.tgz#3246872dcbcb18a54aaa6277a8c7d7f1b155b745"
+    integrity sha1-MkaHLcvLGKVKqmJ3qMfX8bFVt0U=
     dependencies:
-      "@angular/common" "11.2.3"
-      "@angular/core" "11.2.3"
-      rxjs "^7.0.1"
+      "@rollup/pluginutils" "^3.1.0"
+      commondir "^1.0.1"
+      estree-walker "^2.0.1"
+      glob "^7.1.6"
+      is-reference "^1.2.1"
+      magic-string "^0.25.7"
+      resolve "^1.17.0"
+  
+  "@rollup/plugin-inject@^4.0.0":
+    version "4.0.2"
+    resolved "https://registry.npm.taobao.org/@rollup/plugin-inject/download/@rollup/plugin-inject-4.0.2.tgz#55b21bb244a07675f7fdde577db929c82fc17395"
+    integrity sha1-VbIbskSgdnX3/d5XfbkpyC/Bc5U=
+    dependencies:
+      "@rollup/pluginutils" "^3.0.4"
+      estree-walker "^1.0.1"
+      magic-string "^0.25.5"
+  
+  "@rollup/plugin-json@^4.1.0":
+    version "4.1.0"
+    resolved "https://registry.nlark.com/@rollup/plugin-json/download/@rollup/plugin-json-4.1.0.tgz#54e09867ae6963c593844d8bd7a9c718294496f3"
+    integrity sha1-VOCYZ65pY8WThE2L16nHGClElvM=
+    dependencies:
+      "@rollup/pluginutils" "^3.0.8"
+  
+  "@rollup/plugin-node-resolve@^13.0.4":
+    version "13.0.4"
+    resolved "https://registry.nlark.com/@rollup/plugin-node-resolve/download/@rollup/plugin-node-resolve-13.0.4.tgz?cache=0&sync_timestamp=1627164924735&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40rollup%2Fplugin-node-resolve%2Fdownload%2F%40rollup%2Fplugin-node-resolve-13.0.4.tgz#b10222f4145a019740acb7738402130d848660c0"
+    integrity sha1-sQIi9BRaAZdArLdzhAITDYSGYMA=
+    dependencies:
+      "@rollup/pluginutils" "^3.1.0"
+      "@types/resolve" "1.17.1"
+      builtin-modules "^3.1.0"
+      deepmerge "^4.2.2"
+      is-module "^1.0.0"
+      resolve "^1.19.0"
+  
+  "@rollup/plugin-typescript@^8.2.5":
+    version "8.2.5"
+    resolved "https://registry.nlark.com/@rollup/plugin-typescript/download/@rollup/plugin-typescript-8.2.5.tgz#e0319761b2b5105615e5a0c371ae05bc2984b7de"
+    integrity sha1-4DGXYbK1EFYV5aDDca4FvCmEt94=
+    dependencies:
+      "@rollup/pluginutils" "^3.1.0"
+      resolve "^1.17.0"
+  
+  "@rollup/pluginutils@^3.0.4", "@rollup/pluginutils@^3.0.8", "@rollup/pluginutils@^3.1.0":
+    version "3.1.0"
+    resolved "https://registry.nlark.com/@rollup/pluginutils/download/@rollup/pluginutils-3.1.0.tgz?cache=0&sync_timestamp=1626393703548&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40rollup%2Fpluginutils%2Fdownload%2F%40rollup%2Fpluginutils-3.1.0.tgz#706b4524ee6dc8b103b3c995533e5ad680c02b9b"
+    integrity sha1-cGtFJO5tyLEDs8mVUz5a1oDAK5s=
+    dependencies:
+      "@types/estree" "0.0.39"
+      estree-walker "^1.0.1"
+      picomatch "^2.2.2"
+  
+  "@types/estree@*":
+    version "0.0.50"
+    resolved "https://registry.nlark.com/@types/estree/download/@types/estree-0.0.50.tgz?cache=0&sync_timestamp=1629707624966&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Festree%2Fdownload%2F%40types%2Festree-0.0.50.tgz#1e0caa9364d3fccd2931c3ed96fdbeaa5d4cca83"
+    integrity sha1-Hgyqk2TT/M0pMcPtlv2+ql1MyoM=
+  
+  "@types/estree@0.0.39":
+    version "0.0.39"
+    resolved "https://registry.nlark.com/@types/estree/download/@types/estree-0.0.39.tgz?cache=0&sync_timestamp=1629707624966&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Festree%2Fdownload%2F%40types%2Festree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
+    integrity sha1-4Xfmme4bjCLSMXTKqnQiZEOJUJ8=
+  
+  "@types/events@^3.0.0":
+    version "3.0.0"
+    resolved "https://registry.nlark.com/@types/events/download/@types/events-3.0.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fevents%2Fdownload%2F%40types%2Fevents-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
+    integrity sha1-KGLz9Yqaf3w+eNefEw3U1xwlwqc=
+  
+  "@types/node@*":
+    version "16.7.2"
+    resolved "https://registry.nlark.com/@types/node/download/@types/node-16.7.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-16.7.2.tgz#0465a39b5456b61a04d98bd5545f8b34be340cb7"
+    integrity sha1-BGWjm1RWthoE2YvVVF+LNL40DLc=
+  
+  "@types/resolve@1.17.1":
+    version "1.17.1"
+    resolved "https://registry.nlark.com/@types/resolve/download/@types/resolve-1.17.1.tgz?cache=0&sync_timestamp=1629709189512&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fresolve%2Fdownload%2F%40types%2Fresolve-1.17.1.tgz#3afd6ad8967c77e4376c598a82ddd58f46ec45d6"
+    integrity sha1-Ov1q2JZ8d+Q3bFmKgt3Vj0bsRdY=
+    dependencies:
+      "@types/node" "*"
+  
+  "@types/semver@^7.3.8":
+    version "7.3.8"
+    resolved "https://registry.nlark.com/@types/semver/download/@types/semver-7.3.8.tgz?cache=0&sync_timestamp=1629709176578&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fsemver%2Fdownload%2F%40types%2Fsemver-7.3.8.tgz#508a27995498d7586dcecd77c25e289bfaf90c59"
+    integrity sha1-UIonmVSY11htzs13wl4om/r5DFk=
+  
+  axios@^0.21.0:
+    version "0.21.1"
+    resolved "https://registry.nlark.com/axios/download/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+    integrity sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=
+    dependencies:
+      follow-redirects "^1.10.0"
   
   balanced-match@^1.0.0:
     version "1.0.2"
@@ -97,10 +196,61 @@ Lockfile:
       balanced-match "^1.0.0"
       concat-map "0.0.1"
   
+  builtin-modules@^3.1.0:
+    version "3.2.0"
+    resolved "https://registry.nlark.com/builtin-modules/download/builtin-modules-3.2.0.tgz#45d5db99e7ee5e6bc4f362e008bf917ab5049887"
+    integrity sha1-RdXbmefuXmvE82LgCL+RerUEmIc=
+  
+  call-bind@^1.0.0:
+    version "1.0.2"
+    resolved "https://registry.nlark.com/call-bind/download/call-bind-1.0.2.tgz#b1d4e89e688119c3c9a903ad30abb2f6a919be3c"
+    integrity sha1-sdTonmiBGcPJqQOtMKuy9qkZvjw=
+    dependencies:
+      function-bind "^1.1.1"
+      get-intrinsic "^1.0.2"
+  
+  commondir@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.npm.taobao.org/commondir/download/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
+    integrity sha1-3dgA2gxmEnOTzKWVDqloo6rxJTs=
+  
   concat-map@0.0.1:
     version "0.0.1"
     resolved "https://registry.nlark.com/concat-map/download/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
     integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
+  
+  deepmerge@^4.2.2:
+    version "4.2.2"
+    resolved "https://registry.npm.taobao.org/deepmerge/download/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
+    integrity sha1-RNLqNnm49NT/ujPwPYZfwee/SVU=
+  
+  electron-re@^1.0.10:
+    version "1.0.10"
+    resolved "https://registry.nlark.com/electron-re/download/electron-re-1.0.10.tgz#03811830603e27f9caa157dc7caedec752abc6d6"
+    integrity sha1-A4EYMGA+J/nKoVfcfK7ex1KrxtY=
+    dependencies:
+      "@babel/runtime" "^7.12.5"
+      pidusage "^2.0.21"
+  
+  estree-walker@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.npm.taobao.org/estree-walker/download/estree-walker-1.0.1.tgz#31bc5d612c96b704106b477e6dd5d8aa138cb700"
+    integrity sha1-MbxdYSyWtwQQa0d+bdXYqhOMtwA=
+  
+  estree-walker@^2.0.1:
+    version "2.0.2"
+    resolved "https://registry.npm.taobao.org/estree-walker/download/estree-walker-2.0.2.tgz#52f010178c2a4c117a7757cfe942adb7d2da4cac"
+    integrity sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=
+  
+  events@^3.3.0:
+    version "3.3.0"
+    resolved "https://registry.nlark.com/events/download/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
+    integrity sha1-Mala0Kkk4tLEGagTrrLE6HjqdAA=
+  
+  follow-redirects@^1.10.0:
+    version "1.14.2"
+    resolved "https://registry.nlark.com/follow-redirects/download/follow-redirects-1.14.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ffollow-redirects%2Fdownload%2Ffollow-redirects-1.14.2.tgz#cecb825047c00f5e66b142f90fed4f515dec789b"
+    integrity sha1-zsuCUEfAD15msUL5D+1PUV3seJs=
   
   fs.realpath@^1.0.0:
     version "1.0.0"
@@ -112,7 +262,21 @@ Lockfile:
     resolved "https://registry.npm.taobao.org/fsevents/download/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
     integrity sha1-ilJveLj99GI7cJ4Ll1xSwkwC/Ro=
   
-  glob@^7.1.3:
+  function-bind@^1.1.1:
+    version "1.1.1"
+    resolved "https://registry.nlark.com/function-bind/download/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
+    integrity sha1-pWiZ0+o8m6uHS7l3O3xe3pL0iV0=
+  
+  get-intrinsic@^1.0.2:
+    version "1.1.1"
+    resolved "https://registry.nlark.com/get-intrinsic/download/get-intrinsic-1.1.1.tgz#15f59f376f855c446963948f0d24cd3637b4abc6"
+    integrity sha1-FfWfN2+FXERpY5SPDSTNNje0q8Y=
+    dependencies:
+      function-bind "^1.1.1"
+      has "^1.0.3"
+      has-symbols "^1.0.1"
+  
+  glob@^7.1.3, glob@^7.1.6:
     version "7.1.7"
     resolved "https://registry.nlark.com/glob/download/glob-7.1.7.tgz#3b193e9233f01d42d0b3f78294bbeeb418f94a90"
     integrity sha1-Oxk+kjPwHULQs/eClLvutBj5SpA=
@@ -123,6 +287,18 @@ Lockfile:
       minimatch "^3.0.4"
       once "^1.3.0"
       path-is-absolute "^1.0.0"
+  
+  has-symbols@^1.0.1:
+    version "1.0.2"
+    resolved "https://registry.nlark.com/has-symbols/download/has-symbols-1.0.2.tgz#165d3070c00309752a1236a479331e3ac56f1423"
+    integrity sha1-Fl0wcMADCXUqEjakeTMeOsVvFCM=
+  
+  has@^1.0.3:
+    version "1.0.3"
+    resolved "https://registry.nlark.com/has/download/has-1.0.3.tgz#722d7cbfc1f6aa8241f16dd814e011e1f41e8796"
+    integrity sha1-ci18v8H2qoJB8W3YFOAR4fQeh5Y=
+    dependencies:
+      function-bind "^1.1.1"
   
   inflight@^1.0.4:
     version "1.0.6"
@@ -137,12 +313,50 @@ Lockfile:
     resolved "https://registry.nlark.com/inherits/download/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
     integrity sha1-D6LGT5MpF8NDOg3tVTY6rjdBa3w=
   
+  is-core-module@^2.2.0:
+    version "2.6.0"
+    resolved "https://registry.nlark.com/is-core-module/download/is-core-module-2.6.0.tgz?cache=0&sync_timestamp=1629224656971&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fis-core-module%2Fdownload%2Fis-core-module-2.6.0.tgz#d7553b2526fe59b92ba3e40c8df757ec8a709e19"
+    integrity sha1-11U7JSb+Wbkro+QMjfdX7Ipwnhk=
+    dependencies:
+      has "^1.0.3"
+  
+  is-module@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.nlark.com/is-module/download/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
+    integrity sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE=
+  
+  is-reference@^1.2.1:
+    version "1.2.1"
+    resolved "https://registry.nlark.com/is-reference/download/is-reference-1.2.1.tgz#8b2dac0b371f4bc994fdeaba9eb542d03002d0b7"
+    integrity sha1-iy2sCzcfS8mU/eq6nrVC0DAC0Lc=
+    dependencies:
+      "@types/estree" "*"
+  
+  lru-cache@^6.0.0:
+    version "6.0.0"
+    resolved "https://registry.nlark.com/lru-cache/download/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
+    integrity sha1-bW/mVw69lqr5D8rR2vo7JWbbOpQ=
+    dependencies:
+      yallist "^4.0.0"
+  
+  magic-string@^0.25.5, magic-string@^0.25.7:
+    version "0.25.7"
+    resolved "https://registry.nlark.com/magic-string/download/magic-string-0.25.7.tgz?cache=0&sync_timestamp=1618847046304&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fmagic-string%2Fdownload%2Fmagic-string-0.25.7.tgz#3f497d6fd34c669c6798dcb821f2ef31f5445051"
+    integrity sha1-P0l9b9NMZpxnmNy4IfLvMfVEUFE=
+    dependencies:
+      sourcemap-codec "^1.4.4"
+  
   minimatch@^3.0.4:
     version "3.0.4"
     resolved "https://registry.npm.taobao.org/minimatch/download/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
     integrity sha1-UWbihkV/AzBgZL5Ul+jbsMPTIIM=
     dependencies:
       brace-expansion "^1.1.7"
+  
+  object-inspect@^1.9.0:
+    version "1.11.0"
+    resolved "https://registry.nlark.com/object-inspect/download/object-inspect-1.11.0.tgz?cache=0&sync_timestamp=1626120241132&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fobject-inspect%2Fdownload%2Fobject-inspect-1.11.0.tgz#9dceb146cedd4148a0d9e51ab88d34cf509922b1"
+    integrity sha1-nc6xRs7dQUig2eUauI00z1CZIrE=
   
   once@^1.3.0:
     version "1.4.0"
@@ -156,10 +370,49 @@ Lockfile:
     resolved "https://registry.nlark.com/path-is-absolute/download/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
     integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
   
-  reflect-metadata@^0.1.13:
-    version "0.1.13"
-    resolved "https://registry.nlark.com/reflect-metadata/download/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
-    integrity sha1-Z648pXyXKiqhZCsQ/jY/4y1J3Ag=
+  path-parse@^1.0.6:
+    version "1.0.7"
+    resolved "https://registry.nlark.com/path-parse/download/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+    integrity sha1-+8EUtgykKzDZ2vWFjkvWi77bZzU=
+  
+  picomatch@^2.2.2:
+    version "2.3.0"
+    resolved "https://registry.nlark.com/picomatch/download/picomatch-2.3.0.tgz?cache=0&sync_timestamp=1621648246651&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fpicomatch%2Fdownload%2Fpicomatch-2.3.0.tgz#f1f061de8f6a4bf022892e2d128234fb98302972"
+    integrity sha1-8fBh3o9qS/AiiS4tEoI0+5gwKXI=
+  
+  pidusage@^2.0.21:
+    version "2.0.21"
+    resolved "https://registry.npm.taobao.org/pidusage/download/pidusage-2.0.21.tgz#7068967b3d952baea73e57668c98b9eaa876894e"
+    integrity sha1-cGiWez2VK66nPldmjJi56qh2iU4=
+    dependencies:
+      safe-buffer "^5.2.1"
+  
+  "qing-web-api-sdk@git+ssh://git@code.apowo.com:PixelPai/qing-web-api-sdk.git#master":
+    version "0.0.1"
+    resolved "git+ssh://git@code.apowo.com:PixelPai/qing-web-api-sdk.git#aefd1a2aac194cc4b587017db77672de8721cf86"
+    dependencies:
+      axios "^0.21.0"
+      qs "^6.9.4"
+  
+  qs@^6.9.4:
+    version "6.10.1"
+    resolved "https://registry.nlark.com/qs/download/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
+    integrity sha1-STFIL6jWR6Wqt5nFJx0hM7mB+2o=
+    dependencies:
+      side-channel "^1.0.4"
+  
+  regenerator-runtime@^0.13.4:
+    version "0.13.9"
+    resolved "https://registry.nlark.com/regenerator-runtime/download/regenerator-runtime-0.13.9.tgz?cache=0&sync_timestamp=1626993001371&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fregenerator-runtime%2Fdownload%2Fregenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
+    integrity sha1-iSV0Kpj/2QgUmI11Zq0wyjsmO1I=
+  
+  resolve@^1.17.0, resolve@^1.19.0:
+    version "1.20.0"
+    resolved "https://registry.nlark.com/resolve/download/resolve-1.20.0.tgz#629a013fb3f70755d6f0b7935cc1c2c5378b1975"
+    integrity sha1-YpoBP7P3B1XW8LeTXMHCxTeLGXU=
+    dependencies:
+      is-core-module "^2.2.0"
+      path-parse "^1.0.6"
   
   rimraf@^3.0.2:
     version "3.0.2"
@@ -168,6 +421,13 @@ Lockfile:
     dependencies:
       glob "^7.1.3"
   
+  rollup-plugin-polyfill-node@^0.7.0:
+    version "0.7.0"
+    resolved "https://registry.nlark.com/rollup-plugin-polyfill-node/download/rollup-plugin-polyfill-node-0.7.0.tgz#938e13278c98a582a4f8814975ddd26f90afddcc"
+    integrity sha1-k44TJ4yYpYKk+IFJdd3Sb5Cv3cw=
+    dependencies:
+      "@rollup/plugin-inject" "^4.0.0"
+  
   rollup@^2.48.0:
     version "2.56.2"
     resolved "https://registry.nlark.com/rollup/download/rollup-2.56.2.tgz#a045ff3f6af53ee009b5f5016ca3da0329e5470f"
@@ -175,27 +435,48 @@ Lockfile:
     optionalDependencies:
       fsevents "~2.3.2"
   
-  rxjs@^7.0.1:
-    version "7.3.0"
-    resolved "https://registry.nlark.com/rxjs/download/rxjs-7.3.0.tgz#39fe4f3461dc1e50be1475b2b85a0a88c1e938c6"
-    integrity sha1-Of5PNGHcHlC+FHWyuFoKiMHpOMY=
+  rxjs@6.6.3:
+    version "6.6.3"
+    resolved "https://registry.nlark.com/rxjs/download/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
+    integrity sha1-jKhGNcTaqQDA05Z6buesYCce5VI=
     dependencies:
-      tslib "~2.1.0"
+      tslib "^1.9.0"
   
-  tslib@^2.0.0:
+  safe-buffer@^5.2.1:
+    version "5.2.1"
+    resolved "https://registry.npm.taobao.org/safe-buffer/download/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
+    integrity sha1-Hq+fqb2x/dTsdfWPnNtOa3gn7sY=
+  
+  semver@^7.3.5:
+    version "7.3.5"
+    resolved "https://registry.npm.taobao.org/semver/download/semver-7.3.5.tgz?cache=0&sync_timestamp=1616463603361&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fsemver%2Fdownload%2Fsemver-7.3.5.tgz#0b621c879348d8998e4b0e4be94b3f12e6018ef7"
+    integrity sha1-C2Ich5NI2JmOSw5L6Us/EuYBjvc=
+    dependencies:
+      lru-cache "^6.0.0"
+  
+  side-channel@^1.0.4:
+    version "1.0.4"
+    resolved "https://registry.nlark.com/side-channel/download/side-channel-1.0.4.tgz#efce5c8fdc104ee751b25c58d4290011fa5ea2cf"
+    integrity sha1-785cj9wQTudRslxY1CkAEfpeos8=
+    dependencies:
+      call-bind "^1.0.0"
+      get-intrinsic "^1.0.2"
+      object-inspect "^1.9.0"
+  
+  sourcemap-codec@^1.4.4:
+    version "1.4.8"
+    resolved "https://registry.nlark.com/sourcemap-codec/download/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
+    integrity sha1-6oBL2UhXQC5pktBaOO8a41qatMQ=
+  
+  tslib@^1.9.0:
+    version "1.14.1"
+    resolved "https://registry.nlark.com/tslib/download/tslib-1.14.1.tgz?cache=0&sync_timestamp=1628722556410&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
+    integrity sha1-zy04vcNKE0vK8QkcQfZhni9nLQA=
+  
+  tslib@^2.2.0:
     version "2.3.1"
     resolved "https://registry.nlark.com/tslib/download/tslib-2.3.1.tgz?cache=0&sync_timestamp=1628722556410&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
     integrity sha1-6KM1rdXOrlGqJh0ypJAVjvBC7wE=
-  
-  tslib@~2.1.0:
-    version "2.1.0"
-    resolved "https://registry.nlark.com/tslib/download/tslib-2.1.0.tgz?cache=0&sync_timestamp=1628722556410&other_urls=https%3A%2F%2Fregistry.nlark.com%2Ftslib%2Fdownload%2Ftslib-2.1.0.tgz#da60860f1c2ecaa5703ab7d39bc05b6bf988b97a"
-    integrity sha1-2mCGDxwuyqVwOrfTm8Bba/mIuXo=
-  
-  typedi@^0.10.0:
-    version "0.10.0"
-    resolved "https://registry.nlark.com/typedi/download/typedi-0.10.0.tgz#e8f9a5ee100b84addbdfb57fe90d8d9ed2a21dea"
-    integrity sha1-6Pml7hALhK3b37V/6Q2NntKiHeo=
   
   typescript@4.0.2:
     version "4.0.2"
@@ -206,3 +487,8 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.nlark.com/wrappy/download/wrappy-1.0.2.tgz?cache=0&sync_timestamp=1619133505879&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fwrappy%2Fdownload%2Fwrappy-1.0.2.tgz#b5243d8f3ec1aa35f1364605bc0d1036e30ab69f"
     integrity sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=
+  
+  yallist@^4.0.0:
+    version "4.0.0"
+    resolved "https://registry.npm.taobao.org/yallist/download/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72"
+    integrity sha1-m7knkNnA7/7GO+c1GeEaNQGaOnI=

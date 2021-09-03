@@ -31,6 +31,8 @@ export var IOEvents;
     IOEvents["UPLOADFILE_REPLY"] = "upload-file_reply";
     IOEvents["DOWNLOADFILE_REPLY"] = "download-file_reply";
     IOEvents["INSTALLI18N"] = "install-i18n";
+    IOEvents["SET_DEFAULT_LANG"] = "set-default-lang";
+    IOEvents["GET_DEFAULT_LANG"] = "get-default-lang";
 })(IOEvents || (IOEvents = {}));
 export var RendererFunctions;
 (function (RendererFunctions) {
