@@ -23,7 +23,7 @@ export declare type Environment = {
     APP_DATA_PATH: string;
     USER_DATA_PATH: string;
     TEMP_PATH: string;
-    APP_PATH: String;
+    APP_PATH: string;
 };
 export interface FileStat {
     type: string;
