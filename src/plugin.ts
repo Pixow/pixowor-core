@@ -76,7 +76,7 @@ export abstract class Plugin {
   abstract deactivate(): void;
 
   /**
-   * Get qing core
+   * Get pixowor core
    */
   public get pixoworCore(): PixoworCore {
     return this._pixoworCore;

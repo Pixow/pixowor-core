@@ -6,7 +6,7 @@ import { WorkspaceManager } from "./workspace-manager";
 import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
-import QingApi, { Area } from "pixow-api";
+import PixowApi, { Area } from "pixow-api";
 
 export type Env = {
   area: Area;
@@ -56,7 +56,7 @@ export class PixoworCore {
    */
   public storageManager: StorageManager = new StorageManager();
 
-  public qingApi: QingApi;
+  public pixowApi: PixowApi;
 
   private _environment: Env;
 
@@ -65,15 +65,15 @@ export class PixoworCore {
 
     this._environment = env;
 
-    this.qingApi = new QingApi({ area: env.area });
+    this.pixowApi = new PixowApi({ area: env.area });
   }
 
   /**
-   * Set qing api token
+   * Set pixow api token
    * @param token - Get token from signin api
    */
-  public setQingApiToken(token: string) {
-    this.qingApi.setToken(token);
+  public setpixowApiToken(token: string) {
+    this.pixowApi.setToken(token);
   }
 
   public get environment() {

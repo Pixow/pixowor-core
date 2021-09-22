@@ -139,6 +139,11 @@ call-bind@^1.0.0:
     function-bind "^1.1.1"
     get-intrinsic "^1.0.2"
 
+class-transformer@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npm.taobao.org/class-transformer/download/class-transformer-0.4.0.tgz#b52144117b423c516afb44cc1c76dbad31c2165b"
+  integrity sha1-tSFEEXtCPFFq+0TMHHbbrTHCFls=
+
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/commondir/download/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
@@ -317,12 +322,14 @@ pidusage@^2.0.21:
   dependencies:
     safe-buffer "^5.2.1"
 
-"qing-web-api-sdk@git+ssh://git@code.apowo.com:PixelPai/qing-web-api-sdk.git#master":
-  version "0.0.1"
-  resolved "git+ssh://git@code.apowo.com:PixelPai/qing-web-api-sdk.git#aefd1a2aac194cc4b587017db77672de8721cf86"
+"pixow-api@git+ssh://git@github.com:Pixow/pixow-api.git#master":
+  version "0.0.2"
+  resolved "git+ssh://git@github.com:Pixow/pixow-api.git#ee15aec81d6168646a3de8d4c913446e9f566ac5"
   dependencies:
     axios "^0.21.0"
+    class-transformer "^0.4.0"
     qs "^6.9.4"
+    reflect-metadata "^0.1.13"
 
 qs@^6.9.4:
   version "6.10.1"
@@ -330,6 +337,11 @@ qs@^6.9.4:
   integrity sha1-STFIL6jWR6Wqt5nFJx0hM7mB+2o=
   dependencies:
     side-channel "^1.0.4"
+
+reflect-metadata@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.nlark.com/reflect-metadata/download/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha1-Z648pXyXKiqhZCsQ/jY/4y1J3Ag=
 
 regenerator-runtime@^0.13.4:
   version "0.13.9"
