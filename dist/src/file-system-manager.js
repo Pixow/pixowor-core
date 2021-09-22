@@ -1,13 +1,27 @@
 import { MessageChannel as msgc } from "electron-re";
-import { IOEvents } from "./events";
-export var FILE_SERVICE = "file-service";
+import { FileSystemEvents } from "./events";
+export var IO_SERVICE = "io-service";
 var FileSystemManager = /** @class */ (function () {
     function FileSystemManager() {
     }
-    FileSystemManager.prototype.ListDir = function (dir) {
+    FileSystemManager.prototype.installI18n = function (translateObjs) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.LISTDIR, {
+                .invoke(IO_SERVICE, FileSystemEvents.INSTALL_I18N, { translateObjs: translateObjs })
+                .then(function (res) {
+                var error = res.error, data = res.data;
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(data);
+            });
+        });
+    };
+    FileSystemManager.prototype.listDir = function (dir) {
+        return new Promise(function (resolve, reject) {
+            msgc
+                .invoke(IO_SERVICE, FileSystemEvents.LISTDIR, {
                 dir: dir,
             })
                 .then(function (res) {
@@ -20,10 +34,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.RemoveDir = function (dir) {
+    FileSystemManager.prototype.removeDir = function (dir) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.REMOVEDIR, { dir: dir })
+                .invoke(IO_SERVICE, FileSystemEvents.REMOVEDIR, { dir: dir })
                 .then(function (res) {
                 var error = res.error, data = res.data;
                 if (error) {
@@ -34,10 +48,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.ReadFile = function (file) {
+    FileSystemManager.prototype.readFile = function (file) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.READFILE, {
+                .invoke(IO_SERVICE, FileSystemEvents.READFILE, {
                 file: file,
                 options: { encoding: "utf8" },
             })
@@ -51,10 +65,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.WriteFile = function (file, data) {
+    FileSystemManager.prototype.writeFile = function (file, data) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.WRITEFILE, {
+                .invoke(IO_SERVICE, FileSystemEvents.WRITEFILE, {
                 file: file,
                 data: data,
             })
@@ -68,10 +82,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.RemoveFile = function (file, data) {
+    FileSystemManager.prototype.removeFile = function (file, data) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.REMOVEFILE, {
+                .invoke(IO_SERVICE, FileSystemEvents.REMOVEFILE, {
                 file: file,
                 data: data,
             })
@@ -85,10 +99,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.ReadJson = function (path) {
+    FileSystemManager.prototype.readJson = function (path) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.READJSON, {
+                .invoke(IO_SERVICE, FileSystemEvents.READJSON, {
                 path: path,
             })
                 .then(function (res) {
@@ -101,10 +115,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.WriteJson = function (path, data) {
+    FileSystemManager.prototype.writeJson = function (path, data) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.WRITEJSON, {
+                .invoke(IO_SERVICE, FileSystemEvents.WRITEJSON, {
                 path: path,
                 data: data,
             })
@@ -118,10 +132,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.DownloadFile = function (url, output) {
+    FileSystemManager.prototype.downloadFile = function (url, output) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.DOWNLOADFILE, {
+                .invoke(IO_SERVICE, FileSystemEvents.DOWNLOADFILE, {
                 url: url,
                 output: output,
             })
@@ -142,7 +156,7 @@ var FileSystemManager = /** @class */ (function () {
     //       });
     //       const { token } = qiniuTokenRes.data;
     //       msgc
-    //         .invoke(FILE_SERVICE, IOEvents.UPLOADFILE, {
+    //         .invoke(IO_SERVICE, IOEvents.UPLOADFILE, {
     //           filePath,
     //           fileName,
     //           token,
@@ -157,13 +171,13 @@ var FileSystemManager = /** @class */ (function () {
     //         });
     //     });
     //   }
-    FileSystemManager.prototype.UploadFiles = function (files) {
+    FileSystemManager.prototype.uploadFiles = function (files) {
         return new Promise(function (resolve, reject) { });
     };
-    FileSystemManager.prototype.CopyFiles = function (source, dest) {
+    FileSystemManager.prototype.copyFiles = function (source, dest) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.COPYFILES, {
+                .invoke(IO_SERVICE, FileSystemEvents.COPYFILES, {
                 source: source,
                 dest: dest,
             })
@@ -177,10 +191,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.ZipFiles = function (files, folderName) {
+    FileSystemManager.prototype.zipFiles = function (files, folderName) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.ZIPFILES, {
+                .invoke(IO_SERVICE, FileSystemEvents.ZIPFILES, {
                 files: files,
                 folderName: folderName,
             })
@@ -194,10 +208,10 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
-    FileSystemManager.prototype.Unzip = function (file) {
+    FileSystemManager.prototype.unzip = function (file) {
         return new Promise(function (resolve, reject) {
             msgc
-                .invoke(FILE_SERVICE, IOEvents.UNZIP, {
+                .invoke(IO_SERVICE, FileSystemEvents.UNZIP, {
                 file: file,
             })
                 .then(function (res) {

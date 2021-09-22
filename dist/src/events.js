@@ -6,43 +6,43 @@ export var UIEvents;
     UIEvents["CLOSE_DIALOG"] = "CloseDialog";
     UIEvents["ADD_MENU"] = "AddMenu";
     UIEvents["ADD_STATUS"] = "AddStatus";
-    UIEvents["ACTIVATE_IN_MENU"] = "ActivateInMenu";
-    UIEvents["DEACTIVATE_IN_MENU"] = "DeactivateInMenu";
     UIEvents["LOAD_IN_SIDEBAR"] = "LoadInSidebar";
     UIEvents["LOAD_IN_EDITORAREA"] = "LoadInEditorarea";
     UIEvents["LOAD_IN_PANEL"] = "LoadInPanel";
     UIEvents["LOAD_IN_WIDGETBAR"] = "LoadInWidgetbar";
+    UIEvents["INJECT_SLOT"] = "InjectSlot";
+    UIEvents["INJECT_PLUGIN_MENU"] = "InjectPluginMenu";
+    UIEvents["UNINJECT_PLUGIN_MENU"] = "UnInjectPluginMenu";
+    UIEvents["INJECT_EDITOR_AREA"] = "InjectEditorArea";
 })(UIEvents || (UIEvents = {}));
-export var IOEvents;
-(function (IOEvents) {
-    IOEvents["LISTDIR"] = "list-dir";
-    IOEvents["REMOVEDIR"] = "remove-dir";
-    IOEvents["READFILE"] = "read-file";
-    IOEvents["WRITEFILE"] = "write-file";
-    IOEvents["REMOVEFILE"] = "remove-file";
-    IOEvents["READJSON"] = "read-json";
-    IOEvents["WRITEJSON"] = "write-json";
-    IOEvents["DOWNLOADFILE"] = "download-file";
-    IOEvents["UPLOADFILE"] = "upload-file";
-    IOEvents["COPYFILES"] = "copy-files";
-    IOEvents["ZIPFILES"] = "zip-files";
-    IOEvents["UNZIP"] = "unzip";
-    IOEvents["GETSETTINGS"] = "get-settings";
-    IOEvents["UPLOADFILE_REPLY"] = "upload-file_reply";
-    IOEvents["DOWNLOADFILE_REPLY"] = "download-file_reply";
-    IOEvents["INSTALLI18N"] = "install-i18n";
-    IOEvents["SET_DEFAULT_LANG"] = "set-default-lang";
-    IOEvents["GET_DEFAULT_LANG"] = "get-default-lang";
-})(IOEvents || (IOEvents = {}));
-export var RendererFunctions;
-(function (RendererFunctions) {
-    RendererFunctions["REGIST_COMPONENT"] = "registComponent";
-    RendererFunctions["GET_COMPONENT"] = "getComponent";
-    RendererFunctions["REGIST_PLACEMENT_COMPONENTS"] = "registPlacementComponents";
-    RendererFunctions["GET_PLACEMENT_COMPONENTS"] = "getComponentsInPlacement";
-})(RendererFunctions || (RendererFunctions = {}));
-export var RendererEvents;
-(function (RendererEvents) {
-    RendererEvents["UPDATE_SLOT_VIEW"] = "updateSlotView";
-})(RendererEvents || (RendererEvents = {}));
+export var FileSystemEvents;
+(function (FileSystemEvents) {
+    FileSystemEvents["LISTDIR"] = "list-dir";
+    FileSystemEvents["REMOVEDIR"] = "remove-dir";
+    FileSystemEvents["READFILE"] = "read-file";
+    FileSystemEvents["WRITEFILE"] = "write-file";
+    FileSystemEvents["REMOVEFILE"] = "remove-file";
+    FileSystemEvents["READJSON"] = "read-json";
+    FileSystemEvents["WRITEJSON"] = "write-json";
+    FileSystemEvents["DOWNLOADFILE"] = "download-file";
+    FileSystemEvents["UPLOADFILE"] = "upload-file";
+    FileSystemEvents["COPYFILES"] = "copy-files";
+    FileSystemEvents["ZIPFILES"] = "zip-files";
+    FileSystemEvents["UNZIP"] = "unzip";
+    FileSystemEvents["GETSETTINGS"] = "get-settings";
+    FileSystemEvents["UPLOADFILE_REPLY"] = "upload-file_reply";
+    FileSystemEvents["DOWNLOADFILE_REPLY"] = "download-file_reply";
+    FileSystemEvents["INSTALL_I18N"] = "install-i18n";
+    FileSystemEvents["SET_DEFAULT_LANG"] = "set-default-lang";
+    FileSystemEvents["GET_DEFAULT_LANG"] = "get-default-lang";
+})(FileSystemEvents || (FileSystemEvents = {}));
+var QEvent = /** @class */ (function () {
+    function QEvent(name, data) {
+        if (data === void 0) { data = {}; }
+        this.name = name;
+        this.data = data;
+    }
+    return QEvent;
+}());
+export { QEvent };
 //# sourceMappingURL=events.js.map

@@ -1,22 +1,6 @@
 import { Component } from "@angular/core";
-import { App } from "./app";
-export interface PluginManifest {
-    id: string;
-    name: string;
-    author: string;
-    version: string;
-    description: string;
-    minAppVersion: string;
-    authorUrl?: string;
-    dependencies?: {
-        [k: string]: string;
-    };
-}
-export declare enum Severity {
-    SUCCESS = "success",
-    ERROR = "error",
-    INFO = "info"
-}
+import { Severity } from "./workspace-manager";
+import { QingCore } from "./qing-core";
 /**
  * Mod = Cmd on MacOS and Ctrl on other OS
  * Ctrl = Ctrl key for every OS
@@ -43,13 +27,39 @@ export interface Command {
     callback?: () => any;
     hotkeys?: Hotkey[];
 }
+export interface PluginManifest {
+    pid: string;
+    name: string;
+    author: string;
+    version: string;
+    description: string;
+    minAppVersion: string;
+    authorUrl?: string;
+    dependencies?: {
+        [k: string]: string;
+    };
+}
 export declare abstract class Plugin {
-    app: App;
-    manifest: PluginManifest;
-    constructor(app: App, manifest: PluginManifest);
-    abstract install(): Promise<any>;
+    private _qingCore;
+    pid: string;
+    name: string;
+    author: string;
+    version: string;
+    description: string;
+    minAppVersion: string;
+    authorUrl?: string;
+    dependencies?: {
+        [k: string]: string;
+    };
+    constructor(qingCore: QingCore, manifest: PluginManifest);
+    install(): Promise<void>;
     abstract activate(): void;
     abstract deactivate(): void;
+    /**
+     * Get qing core
+     */
+    get qingCore(): QingCore;
+    colorLog(message: string): void;
     /**
      * Register a command globally. The command id and name will be automatically prefixed with this plugin's id and name.
      * @param command Command
@@ -62,13 +72,29 @@ export declare abstract class Plugin {
      */
     addMenu(label: string, callback: Function): void;
     /**
-     *
+     * Regist angular component for use.
      * @param  {string} name - Component
      * @param  {Component} component - Register a angular component. The function will use component classname as key to regist.
      */
-    registerComponent(component: Component): void;
+    registerComponent(name: string, component: Component): void;
     /**
-     *
+     * UnRegister angular component that registed.
+     * @param name - Component name
+     */
+    unRrgisterComponent(name: string): void;
+    /**
+     * Regist variable
+     * @param name - variable name
+     * @param data - variable init data
+     */
+    registerVariable(name: string, data?: any): void;
+    /**
+     * UnRegister variable
+     * @param name - variable name
+     */
+    unRegisterVariable(name: string): void;
+    /**
+     * Toast message
      * @param {Severity} severity - Message severity.
      * @param {string} message - Toast message.
      */
@@ -79,4 +105,10 @@ export declare abstract class Plugin {
      * @param {string} componentName - Component name.
      */
     openDialog(componentName: string): void;
+    /**
+     * Get value from localstorage
+     * @param key localstorage key
+     * @returns
+     */
+    get(key: string): any;
 }

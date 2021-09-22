@@ -9,7 +9,7 @@ export default {
     sourcemap: false,
     file: "dist/index.js",
     format: "umd",
-    name: "qingCore",
+    name: "pixoworCore",
   },
   plugins: [
     typescript({ sourceMap: true, tsconfig: "./tsconfig.json" }),

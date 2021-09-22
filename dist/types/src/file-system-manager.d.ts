@@ -8,18 +8,21 @@ export declare type MsgcResponse = {
     error: Error | null;
     data: any;
 };
-export declare const FILE_SERVICE = "file-service";
+export declare const IO_SERVICE = "io-service";
 export declare class FileSystemManager {
-    ListDir(dir: string): Promise<FileStat[]>;
-    RemoveDir(dir: string): Promise<unknown>;
-    ReadFile(file: string): Promise<unknown>;
-    WriteFile(file: string, data: any): Promise<unknown>;
-    RemoveFile(file: string, data: any): Promise<unknown>;
-    ReadJson(path: string): Promise<unknown>;
-    WriteJson(path: string, data: any): Promise<unknown>;
-    DownloadFile(url: string, output: string): Promise<unknown>;
-    UploadFiles(files: string[]): Promise<unknown>;
-    CopyFiles(source: string, dest: string): Promise<unknown>;
-    ZipFiles(files: FileStat[], folderName: string): Promise<unknown>;
-    Unzip(file: string): Promise<unknown>;
+    installI18n(translateObjs: {
+        [k: string]: object;
+    }): Promise<unknown>;
+    listDir(dir: string): Promise<FileStat[]>;
+    removeDir(dir: string): Promise<unknown>;
+    readFile(file: string): Promise<unknown>;
+    writeFile(file: string, data: any): Promise<unknown>;
+    removeFile(file: string, data: any): Promise<unknown>;
+    readJson(path: string): Promise<unknown>;
+    writeJson(path: string, data: any): Promise<unknown>;
+    downloadFile(url: string, output: string): Promise<unknown>;
+    uploadFiles(files: string[]): Promise<unknown>;
+    copyFiles(source: string, dest: string): Promise<unknown>;
+    zipFiles(files: FileStat[], folderName: string): Promise<unknown>;
+    unzip(file: string): Promise<unknown>;
 }

@@ -1,15 +1,31 @@
-import { Plugin } from "src";
+import { Plugin } from "./plugin";
 import { FileSystemManager } from "./file-system-manager";
 import { ServiceManager } from "./service-manager";
 import { StateManager } from "./state-manager";
 import { WorkspaceManager } from "./workspace-manager";
 import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
+import { StorageManager } from "./storage-manager";
+import QingApi, { Area } from "pixow-api";
 
+export type Env = {
+  area: Area;
+  production: boolean;
+  environment: string;
+  bucket: string;
+  API_URL: string;
+  WEB_RESOURCE_URI: string;
+  TEST_GAME_CONFIG_IP_MOBILE: string;
+  TEST_GAME_CONFIG_PORT_MOBILE: number;
+  APP_DATA_PATH: string;
+  USER_DATA_PATH: string;
+  TEMP_PATH: string;
+  APP_PATH: string;
+};
 @Injectable({
   providedIn: "root",
 })
-export class QingCore {
+export class PixoworCore {
   /**
    * App version, sync with package version
    */
@@ -35,8 +51,33 @@ export class QingCore {
    */
   public serviceManager: ServiceManager = new ServiceManager();
 
-  constructor(version: string) {
+  /**
+   * LocalStorage manager
+   */
+  public storageManager: StorageManager = new StorageManager();
+
+  public qingApi: QingApi;
+
+  private _environment: Env;
+
+  constructor(version: string, env: Env) {
     this.version = version;
+
+    this._environment = env;
+
+    this.qingApi = new QingApi({ area: env.area });
+  }
+
+  /**
+   * Set qing api token
+   * @param token - Get token from signin api
+   */
+  public setQingApiToken(token: string) {
+    this.qingApi.setToken(token);
+  }
+
+  public get environment() {
+    return this._environment
   }
 
   private dependencyValid(installedVersion: string, requiredVersion: string) {
@@ -54,12 +95,12 @@ export class QingCore {
    * @param plugin - The plugin need installed.
    */
   public async installPlugin(plugin: Plugin) {
-    const { minAppVersion, dependencies } = plugin.manifest;
+    const { minAppVersion, dependencies } = plugin;
 
     let installErrors: string[] = [];
     if (!this.dependencyValid(this.version, minAppVersion)) {
       installErrors.push(
-        `Plugin ${plugin.manifest.name} need minAppVersion ${minAppVersion}, but app version is ${this.version}!`
+        `Plugin ${plugin.name} need minAppVersion ${minAppVersion}, but app version is ${this.version}!`
       );
     }
 
@@ -71,7 +112,7 @@ export class QingCore {
         if (!installedPlugin) {
           installErrors.push(`Plugin ${pluginName} has not installed`);
         } else {
-          const installedPluginVersion = installedPlugin.manifest.version;
+          const installedPluginVersion = installedPlugin.version;
 
           if (
             !this.dependencyValid(installedPluginVersion, requiredPluginVersion)
@@ -94,18 +135,22 @@ export class QingCore {
 
   /**
    * Activate plugin that has been installed.
-   * @param {Plugin} plugin - The plugin need activate
+   * @param plugins - The plugin need activate
    */
-  public activatePlugin(plugin: Plugin) {
-    plugin.activate();
+  public activatePlugins(plugins: Plugin[]) {
+    
+    for (const plugin of plugins) {
+      this.stateManager.registerPlugin(plugin)
+      plugin.activate();
+    }
   }
 
   /**
    * Deactivate plugin that has been installed.
-   * @param {string} id - The plugin id need deactivate
+   * @param {string} pid - The plugin id need deactivate
    */
-  public deactivatePlugin(id: string) {
-    const plugin = this.stateManager.getPlugin(id);
+  public deactivatePlugin(pid: string) {
+    const plugin = this.stateManager.getPlugin(pid);
 
     if (plugin) {
       plugin.deactivate();

@@ -14,14 +14,29 @@ export type MsgcResponse = {
 };
 
 
-export const FILE_SERVICE = "file-service"
+export const IO_SERVICE = "io-service"
 
 export class FileSystemManager {
+    public installI18n(translateObjs: { [k: string]: object }) {
+      return new Promise((resolve, reject) => {
+        msgc
+          .invoke(IO_SERVICE, FileSystemEvents.INSTALL_I18N, { translateObjs })
+          .then((res: MsgcResponse) => {
+            const { error, data } = res;
+            if (error) {
+              reject(error);
+              return;
+            }
 
-  public ListDir(dir: string): Promise<FileStat[]> {
+            resolve(data);
+          });
+      });
+    }
+
+  public listDir(dir: string): Promise<FileStat[]> {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.LISTDIR, {
+        .invoke(IO_SERVICE, FileSystemEvents.LISTDIR, {
           dir,
         })
         .then((res: MsgcResponse) => {
@@ -36,10 +51,10 @@ export class FileSystemManager {
     });
   }
 
-  public RemoveDir(dir: string) {
+  public removeDir(dir: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.REMOVEDIR, { dir })
+        .invoke(IO_SERVICE, FileSystemEvents.REMOVEDIR, { dir })
         .then((res: MsgcResponse) => {
           const { error, data } = res;
           if (error) {
@@ -52,10 +67,10 @@ export class FileSystemManager {
     });
   }
 
-  public ReadFile(file: string) {
+  public readFile(file: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.READFILE, {
+        .invoke(IO_SERVICE, FileSystemEvents.READFILE, {
           file,
           options: { encoding: "utf8" },
         })
@@ -71,10 +86,10 @@ export class FileSystemManager {
     });
   }
 
-  public WriteFile(file: string, data: any) {
+  public writeFile(file: string, data: any) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.WRITEFILE, {
+        .invoke(IO_SERVICE, FileSystemEvents.WRITEFILE, {
           file,
           data,
         })
@@ -90,10 +105,10 @@ export class FileSystemManager {
     });
   }
 
-  public RemoveFile(file: string, data: any) {
+  public removeFile(file: string, data: any) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.REMOVEFILE, {
+        .invoke(IO_SERVICE, FileSystemEvents.REMOVEFILE, {
           file,
           data,
         })
@@ -109,10 +124,10 @@ export class FileSystemManager {
     });
   }
 
-  public ReadJson(path: string) {
+  public readJson(path: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.READJSON, {
+        .invoke(IO_SERVICE, FileSystemEvents.READJSON, {
           path,
         })
         .then((res: MsgcResponse) => {
@@ -127,10 +142,10 @@ export class FileSystemManager {
     });
   }
 
-  public WriteJson(path: string, data: any) {
+  public writeJson(path: string, data: any) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.WRITEJSON, {
+        .invoke(IO_SERVICE, FileSystemEvents.WRITEJSON, {
           path,
           data,
         })
@@ -146,10 +161,10 @@ export class FileSystemManager {
     });
   }
 
-  public DownloadFile(url: string, output: string) {
+  public downloadFile(url: string, output: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.DOWNLOADFILE, {
+        .invoke(IO_SERVICE, FileSystemEvents.DOWNLOADFILE, {
           url,
           output,
         })
@@ -165,40 +180,40 @@ export class FileSystemManager {
     });
   }
 
-//   public UploadFile(filePath: string, fileName: string) {
-//     return new Promise(async (resolve, reject) => {
-//       const qiniuTokenRes = await this.WebServiceSdk.util.getQiniuToken({
-//         name: fileName,
-//       });
+  //   public UploadFile(filePath: string, fileName: string) {
+  //     return new Promise(async (resolve, reject) => {
+  //       const qiniuTokenRes = await this.WebServiceSdk.util.getQiniuToken({
+  //         name: fileName,
+  //       });
 
-//       const { token } = qiniuTokenRes.data;
+  //       const { token } = qiniuTokenRes.data;
 
-//       msgc
-//         .invoke(FILE_SERVICE, IOEvents.UPLOADFILE, {
-//           filePath,
-//           fileName,
-//           token,
-//         })
-//         .then((res: MsgcResponse) => {
-//           const { error, data } = res;
-//           if (error) {
-//             reject(error);
-//             return;
-//           }
+  //       msgc
+  //         .invoke(IO_SERVICE, IOEvents.UPLOADFILE, {
+  //           filePath,
+  //           fileName,
+  //           token,
+  //         })
+  //         .then((res: MsgcResponse) => {
+  //           const { error, data } = res;
+  //           if (error) {
+  //             reject(error);
+  //             return;
+  //           }
 
-//           resolve(data);
-//         });
-//     });
-//   }
+  //           resolve(data);
+  //         });
+  //     });
+  //   }
 
-  public UploadFiles(files: string[]) {
+  public uploadFiles(files: string[]) {
     return new Promise((resolve, reject) => {});
   }
 
-  public CopyFiles(source: string, dest: string) {
+  public copyFiles(source: string, dest: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.COPYFILES, {
+        .invoke(IO_SERVICE, FileSystemEvents.COPYFILES, {
           source,
           dest,
         })
@@ -214,10 +229,10 @@ export class FileSystemManager {
     });
   }
 
-  public ZipFiles(files: FileStat[], folderName: string) {
+  public zipFiles(files: FileStat[], folderName: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.ZIPFILES, {
+        .invoke(IO_SERVICE, FileSystemEvents.ZIPFILES, {
           files,
           folderName,
         })
@@ -233,10 +248,10 @@ export class FileSystemManager {
     });
   }
 
-  public Unzip(file: string) {
+  public unzip(file: string) {
     return new Promise((resolve, reject) => {
       msgc
-        .invoke(FILE_SERVICE, FileSystemEvents.UNZIP, {
+        .invoke(IO_SERVICE, FileSystemEvents.UNZIP, {
           file,
         })
         .then((res: MsgcResponse) => {

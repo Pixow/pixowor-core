@@ -5,12 +5,14 @@ export enum UIEvents {
   CLOSE_DIALOG = "CloseDialog",
   ADD_MENU = "AddMenu",
   ADD_STATUS = "AddStatus",
-  ACTIVATE_IN_MENU = "ActivateInMenu",
-  DEACTIVATE_IN_MENU = "DeactivateInMenu",
   LOAD_IN_SIDEBAR = "LoadInSidebar",
   LOAD_IN_EDITORAREA = "LoadInEditorarea",
   LOAD_IN_PANEL = "LoadInPanel",
   LOAD_IN_WIDGETBAR = "LoadInWidgetbar",
+  INJECT_SLOT = "InjectSlot",
+  INJECT_PLUGIN_MENU = "InjectPluginMenu",
+  UNINJECT_PLUGIN_MENU = "UnInjectPluginMenu",
+  INJECT_EDITOR_AREA = "InjectEditorArea"
 }
 
 
@@ -32,19 +34,26 @@ export enum FileSystemEvents {
   UPLOADFILE_REPLY = "upload-file_reply",
   DOWNLOADFILE_REPLY = "download-file_reply",
 
-  INSTALLI18N = "install-i18n",
+  INSTALL_I18N = "install-i18n",
 
   SET_DEFAULT_LANG = "set-default-lang",
-  GET_DEFAULT_LANG = "get-default-lang"
+  GET_DEFAULT_LANG = "get-default-lang",
 }
 
-export enum RendererFunctions {
-  REGIST_COMPONENT = "registComponent",
-  GET_COMPONENT = "getComponent",
-  REGIST_PLACEMENT_COMPONENTS = "registPlacementComponents",
-  GET_PLACEMENT_COMPONENTS = "getComponentsInPlacement",
-}
+// export enum RendererFunctions {
+//   REGIST_COMPONENT = "registComponent",
+//   GET_COMPONENT = "getComponent",
+//   REGIST_PLACEMENT_COMPONENTS = "registPlacementComponents",
+//   GET_PLACEMENT_COMPONENTS = "getComponentsInPlacement",
+// }
 
-export enum RendererEvents {
-  UPDATE_SLOT_VIEW = "updateSlotView"
+type BindData = { [k: string]: any };
+export class QEvent {
+  name: string;
+  data: BindData;
+
+  constructor(name: string, data: BindData = {}) {
+    this.name = name;
+    this.data = data;
+  }
 }

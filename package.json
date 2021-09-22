@@ -1,5 +1,5 @@
 {
-  "name": "qing-core",
+  "name": "pixowor-core",
   "version": "1.0.15",
   "main": "dist/src/index.js",
   "types": "dist/types/src/index.d.ts",
@@ -26,7 +26,7 @@
     "@angular/core": "^12.2.2",
     "electron-re": "^1.0.10",
     "events": "^3.3.0",
-    "qing-web-api-sdk": "git+ssh://git@code.apowo.com:PixelPai/qing-web-api-sdk.git#master",
+    "pixow-api": "git+ssh://git@github.com:Pixow/pixow-api.git#master",
     "rxjs": "6.6.3",
     "semver": "^7.3.5"
   },

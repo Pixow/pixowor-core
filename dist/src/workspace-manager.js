@@ -48,16 +48,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import EventEmitter from "events";
-export var WorkspaceSlots;
-(function (WorkspaceSlots) {
-    WorkspaceSlots["LeftSplit"] = "left-split";
-    WorkspaceSlots["RightSplit"] = "right-split";
-    WorkspaceSlots["RootSplit"] = "root-split";
-    WorkspaceSlots["LeftRibbon"] = "left-ribbon";
-    WorkspaceSlots["RightRibbon"] = "right-ribbon";
-    WorkspaceSlots["TopBar"] = "top-bar";
-    WorkspaceSlots["RootBar"] = "root-bar";
-})(WorkspaceSlots || (WorkspaceSlots = {}));
+import { UIEvents } from "./events";
+export var Severity;
+(function (Severity) {
+    Severity["SUCCESS"] = "success";
+    Severity["ERROR"] = "error";
+    Severity["INFO"] = "info";
+})(Severity || (Severity = {}));
+export var Placements;
+(function (Placements) {
+    Placements["MENUBAR"] = "menubar";
+    Placements["SIDEBAR"] = "sidebar";
+    Placements["EDITORAREA"] = "editor-area";
+    Placements["WIDGETBAR"] = "widgetbar";
+    Placements["STATUSBAR"] = "statusbar";
+    Placements["TOAST"] = "toast";
+})(Placements || (Placements = {}));
 var WorkspaceSidedock = /** @class */ (function () {
     function WorkspaceSidedock() {
     }
@@ -76,17 +82,60 @@ var WorkspaceSplit = /** @class */ (function () {
     return WorkspaceSplit;
 }());
 export { WorkspaceSplit };
-var Workspace = /** @class */ (function (_super) {
-    __extends(Workspace, _super);
-    function Workspace() {
-        return _super.call(this) || this;
+var WorkspaceManager = /** @class */ (function (_super) {
+    __extends(WorkspaceManager, _super);
+    function WorkspaceManager() {
+        var _this = _super.call(this) || this;
+        _this._slots = new Map();
+        return _this;
     }
-    Workspace.prototype.changeLayout = function () {
+    WorkspaceManager.prototype.changeLayout = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });
     };
-    return Workspace;
+    /**
+     * Regist component in a slot
+     * @param placement - Placement name
+     * @param component - Slot component
+     */
+    WorkspaceManager.prototype.registerSlotComponent = function (placement, component) {
+        this._slots.set(placement, component);
+    };
+    /**
+     * Get a slot component
+     * @param placement - Placement name
+     * @returns
+     */
+    WorkspaceManager.prototype.getSlotComponent = function (placement) {
+        return this._slots.get(placement);
+    };
+    /**
+     * Toast message
+     * @param severity - Message severity.
+     * @param message - Toast message.
+     */
+    WorkspaceManager.prototype.toast = function (severity, message) {
+        this.emit(UIEvents.TOAST, { severity: severity, message: message });
+    };
+    /**
+     * Alert message
+     * @param severity - Message severity.
+     * @param message - Toast message.
+     */
+    WorkspaceManager.prototype.alert = function (message) {
+        this.emit(UIEvents.ALERT, { message: message });
+    };
+    /**
+     * Open a registed component in a dialog.
+     * @param componentName - Component name.
+     * @param config - Config data.
+     */
+    WorkspaceManager.prototype.openDialog = function (componentName, config) {
+        if (config === void 0) { config = {}; }
+        this.emit(UIEvents.OPEN_DIALOG, { componentName: componentName, config: config });
+    };
+    return WorkspaceManager;
 }(EventEmitter));
-export { Workspace };
-//# sourceMappingURL=workspace.js.map
+export { WorkspaceManager };
+//# sourceMappingURL=workspace-manager.js.map

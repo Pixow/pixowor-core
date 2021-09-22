@@ -7,5 +7,6 @@ export declare class ServiceManager {
     private services;
     private commands;
     injectService<T>(service: Constructable<T>, serviceInstance: T): void;
+    getService<T>(service: Constructable<T>): T;
     registCommand(command: Command): void;
 }

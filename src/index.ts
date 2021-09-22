@@ -1,3 +1,7 @@
-export { Plugin } from "./plugin"
-export { QingCore } from "./qing-core";
+export * from "./plugin"
+export * from "./pixowor-core";
 export * from "./events"
+export * from "./file-system-manager";
+export * from "./state-manager";
+export * from "./service-manager";
+export * from "./workspace-manager";

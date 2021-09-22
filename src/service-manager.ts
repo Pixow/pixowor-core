@@ -13,6 +13,10 @@ export class ServiceManager {
     this.services.set(service.name, serviceInstance);
   }
 
+  getService<T>(service: Constructable<T>): T {
+    return this.services.get(service.name)
+  }
+
   registCommand(command: Command) {
 	this.commands.set(command.id, command);
   }
