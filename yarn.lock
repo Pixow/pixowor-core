@@ -322,9 +322,9 @@ pidusage@^2.0.21:
   dependencies:
     safe-buffer "^5.2.1"
 
-"pixow-api@git+ssh://git@github.com:Pixow/pixow-api.git#master":
+"pixow-api@git+ssh://git@github.com:Pixow/pixow-api.git#develop":
   version "0.0.2"
-  resolved "git+ssh://git@github.com:Pixow/pixow-api.git#ee15aec81d6168646a3de8d4c913446e9f566ac5"
+  resolved "git+ssh://git@github.com:Pixow/pixow-api.git#fe7292c7e0c176c26bba6b2c316fc5c453b9938c"
   dependencies:
     axios "^0.21.0"
     class-transformer "^0.4.0"
