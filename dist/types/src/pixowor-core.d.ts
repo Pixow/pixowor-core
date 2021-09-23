@@ -4,7 +4,7 @@ import { ServiceManager } from "./service-manager";
 import { StateManager } from "./state-manager";
 import { WorkspaceManager } from "./workspace-manager";
 import { StorageManager } from "./storage-manager";
-import QingApi, { Area } from "qing-api";
+import PixowApi, { Area } from "pixow-api";
 export declare type Env = {
     area: Area;
     production: boolean;
@@ -19,7 +19,7 @@ export declare type Env = {
     TEMP_PATH: string;
     APP_PATH: string;
 };
-export declare class QingCore {
+export declare class PixoworCore {
     /**
      * App version, sync with package version
      */
@@ -44,14 +44,14 @@ export declare class QingCore {
      * LocalStorage manager
      */
     storageManager: StorageManager;
-    qingApi: QingApi;
+    pixowApi: PixowApi;
     private _environment;
     constructor(version: string, env: Env);
     /**
-     * Set qing api token
+     * Set pixow api token
      * @param token - Get token from signin api
      */
-    setQingApiToken(token: string): void;
+    setPixowApiToken(token: string): void;
     get environment(): Env;
     private dependencyValid;
     /**

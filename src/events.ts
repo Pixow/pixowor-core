@@ -12,7 +12,7 @@ export enum UIEvents {
   INJECT_SLOT = "InjectSlot",
   INJECT_PLUGIN_MENU = "InjectPluginMenu",
   UNINJECT_PLUGIN_MENU = "UnInjectPluginMenu",
-  INJECT_EDITOR_AREA = "InjectEditorArea"
+  INJECT_EDITOR_AREA = "InjectEditorArea",
 }
 
 

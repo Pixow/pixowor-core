@@ -72,7 +72,7 @@ export class PixoworCore {
    * Set pixow api token
    * @param token - Get token from signin api
    */
-  public setpixowApiToken(token: string) {
+  public setPixowApiToken(token: string) {
     this.pixowApi.setToken(token);
   }
 

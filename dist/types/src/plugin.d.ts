@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Severity } from "./workspace-manager";
-import { QingCore } from "./qing-core";
+import { PixoworCore } from "./pixowor-core";
 /**
  * Mod = Cmd on MacOS and Ctrl on other OS
  * Ctrl = Ctrl key for every OS
@@ -40,7 +40,7 @@ export interface PluginManifest {
     };
 }
 export declare abstract class Plugin {
-    private _qingCore;
+    private _pixoworCore;
     pid: string;
     name: string;
     author: string;
@@ -51,14 +51,14 @@ export declare abstract class Plugin {
     dependencies?: {
         [k: string]: string;
     };
-    constructor(qingCore: QingCore, manifest: PluginManifest);
+    constructor(pixoworCore: PixoworCore, manifest: PluginManifest);
     install(): Promise<void>;
     abstract activate(): void;
     abstract deactivate(): void;
     /**
-     * Get qing core
+     * Get pixowor core
      */
-    get qingCore(): QingCore;
+    get pixoworCore(): PixoworCore;
     colorLog(message: string): void;
     /**
      * Register a command globally. The command id and name will be automatically prefixed with this plugin's id and name.

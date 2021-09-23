@@ -50,9 +50,9 @@ import { WorkspaceManager } from "./workspace-manager";
 import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
-import QingApi from "qing-api";
-var QingCore = /** @class */ (function () {
-    function QingCore(version, env) {
+import PixowApi from "pixow-api";
+var PixoworCore = /** @class */ (function () {
+    function PixoworCore(version, env) {
         /**
          * Record workspace data
          */
@@ -75,23 +75,23 @@ var QingCore = /** @class */ (function () {
         this.storageManager = new StorageManager();
         this.version = version;
         this._environment = env;
-        this.qingApi = new QingApi({ area: env.area });
+        this.pixowApi = new PixowApi({ area: env.area });
     }
     /**
-     * Set qing api token
+     * Set pixow api token
      * @param token - Get token from signin api
      */
-    QingCore.prototype.setQingApiToken = function (token) {
-        this.qingApi.setToken(token);
+    PixoworCore.prototype.setPixowApiToken = function (token) {
+        this.pixowApi.setToken(token);
     };
-    Object.defineProperty(QingCore.prototype, "environment", {
+    Object.defineProperty(PixoworCore.prototype, "environment", {
         get: function () {
             return this._environment;
         },
         enumerable: false,
         configurable: true
     });
-    QingCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
+    PixoworCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
         var versionDiff = diff(installedVersion, requiredVersion);
         return ((versionDiff === null ||
             versionDiff === "patch" ||
@@ -102,7 +102,7 @@ var QingCore = /** @class */ (function () {
      * Install plugin, and check plugin dependencies has bee installed.
      * @param plugin - The plugin need installed.
      */
-    QingCore.prototype.installPlugin = function (plugin) {
+    PixoworCore.prototype.installPlugin = function (plugin) {
         return __awaiter(this, void 0, void 0, function () {
             var minAppVersion, dependencies, installErrors, pluginName, requiredPluginVersion, installedPlugin, installedPluginVersion;
             return __generator(this, function (_a) {
@@ -146,7 +146,7 @@ var QingCore = /** @class */ (function () {
      * Activate plugin that has been installed.
      * @param plugins - The plugin need activate
      */
-    QingCore.prototype.activatePlugins = function (plugins) {
+    PixoworCore.prototype.activatePlugins = function (plugins) {
         for (var _i = 0, plugins_1 = plugins; _i < plugins_1.length; _i++) {
             var plugin = plugins_1[_i];
             this.stateManager.registerPlugin(plugin);
@@ -157,19 +157,19 @@ var QingCore = /** @class */ (function () {
      * Deactivate plugin that has been installed.
      * @param {string} pid - The plugin id need deactivate
      */
-    QingCore.prototype.deactivatePlugin = function (pid) {
+    PixoworCore.prototype.deactivatePlugin = function (pid) {
         var plugin = this.stateManager.getPlugin(pid);
         if (plugin) {
             plugin.deactivate();
         }
     };
-    QingCore = __decorate([
+    PixoworCore = __decorate([
         Injectable({
             providedIn: "root",
         }),
         __metadata("design:paramtypes", [String, Object])
-    ], QingCore);
-    return QingCore;
+    ], PixoworCore);
+    return PixoworCore;
 }());
-export { QingCore };
-//# sourceMappingURL=qing-core.js.map
+export { PixoworCore };
+//# sourceMappingURL=pixowor-core.js.map

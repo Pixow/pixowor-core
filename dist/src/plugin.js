@@ -36,8 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { UIEvents } from "./events";
 var Plugin = /** @class */ (function () {
-    function Plugin(qingCore, manifest) {
-        this._qingCore = qingCore;
+    function Plugin(pixoworCore, manifest) {
+        this._pixoworCore = pixoworCore;
         this.pid = manifest.pid;
         this.name = manifest.name;
         this.author = manifest.author;
@@ -52,12 +52,12 @@ var Plugin = /** @class */ (function () {
             return [2 /*return*/];
         }); });
     };
-    Object.defineProperty(Plugin.prototype, "qingCore", {
+    Object.defineProperty(Plugin.prototype, "pixoworCore", {
         /**
-         * Get qing core
+         * Get pixowor core
          */
         get: function () {
-            return this._qingCore;
+            return this._pixoworCore;
         },
         enumerable: false,
         configurable: true
@@ -70,7 +70,7 @@ var Plugin = /** @class */ (function () {
      * @param command Command
      */
     Plugin.prototype.addCommand = function (command) {
-        this.qingCore.serviceManager.registCommand(command);
+        this.pixoworCore.serviceManager.registCommand(command);
     };
     /**
      *
@@ -78,7 +78,7 @@ var Plugin = /** @class */ (function () {
      * @param {Function} callback - The callback to trigger
      */
     Plugin.prototype.addMenu = function (label, callback) {
-        this.qingCore.workspace.emit(UIEvents.ADD_MENU, { label: label, callback: callback });
+        this.pixoworCore.workspace.emit(UIEvents.ADD_MENU, { label: label, callback: callback });
     };
     /**
      * Regist angular component for use.
@@ -86,14 +86,14 @@ var Plugin = /** @class */ (function () {
      * @param  {Component} component - Register a angular component. The function will use component classname as key to regist.
      */
     Plugin.prototype.registerComponent = function (name, component) {
-        this.qingCore.stateManager.registerComponent(name, component);
+        this.pixoworCore.stateManager.registerComponent(name, component);
     };
     /**
      * UnRegister angular component that registed.
      * @param name - Component name
      */
     Plugin.prototype.unRrgisterComponent = function (name) {
-        this.qingCore.stateManager.unregisterComponent(name);
+        this.pixoworCore.stateManager.unregisterComponent(name);
     };
     /**
      * Regist variable
@@ -102,14 +102,14 @@ var Plugin = /** @class */ (function () {
      */
     Plugin.prototype.registerVariable = function (name, data) {
         if (data === void 0) { data = null; }
-        this.qingCore.stateManager.registerVariable(name, data);
+        this.pixoworCore.stateManager.registerVariable(name, data);
     };
     /**
      * UnRegister variable
      * @param name - variable name
      */
     Plugin.prototype.unRegisterVariable = function (name) {
-        this.qingCore.stateManager.unRegisterVariable(name);
+        this.pixoworCore.stateManager.unRegisterVariable(name);
     };
     /**
      * Toast message
@@ -117,17 +117,17 @@ var Plugin = /** @class */ (function () {
      * @param {string} message - Toast message.
      */
     Plugin.prototype.toast = function (severity, message) {
-        this.qingCore.workspace.toast(severity, message);
+        this.pixoworCore.workspace.toast(severity, message);
     };
     Plugin.prototype.alert = function (message) {
-        this.qingCore.workspace.emit(UIEvents.ALERT, { message: message });
+        this.pixoworCore.workspace.emit(UIEvents.ALERT, { message: message });
     };
     /**
      * Open a component you registed in a dialog.
      * @param {string} componentName - Component name.
      */
     Plugin.prototype.openDialog = function (componentName) {
-        this.qingCore.workspace.emit(UIEvents.OPEN_DIALOG, { componentName: componentName });
+        this.pixoworCore.workspace.emit(UIEvents.OPEN_DIALOG, { componentName: componentName });
     };
     /**
      * Get value from localstorage
@@ -135,7 +135,7 @@ var Plugin = /** @class */ (function () {
      * @returns
      */
     Plugin.prototype.get = function (key) {
-        return this.qingCore.storageManager.get(key);
+        return this.pixoworCore.storageManager.get(key);
     };
     return Plugin;
 }());

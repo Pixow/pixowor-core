@@ -1,5 +1,5 @@
 export * from "./plugin";
-export * from "./qing-core";
+export * from "./pixowor-core";
 export * from "./events";
 export * from "./file-system-manager";
 export * from "./state-manager";
