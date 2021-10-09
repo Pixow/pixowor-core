@@ -27,6 +27,7 @@
     "electron-re": "^1.0.10",
     "events": "^3.3.0",
     "pixow-api": "git+ssh://git@github.com:Pixow/pixow-api.git#develop",
+    "qiniu-js": "^3.3.3",
     "rxjs": "6.6.3",
     "semver": "^7.3.5"
   },

@@ -9,6 +9,14 @@
   dependencies:
     tslib "^2.2.0"
 
+"@babel/runtime-corejs2@^7.10.2":
+  version "7.15.4"
+  resolved "https://registry.nlark.com/@babel/runtime-corejs2/download/@babel/runtime-corejs2-7.15.4.tgz#dda5554d18e2ebd4e374e73708590e72e1e674f7"
+  integrity sha1-3aVVTRji69TjdOc3CFkOcuHmdPc=
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.12.5":
   version "7.15.3"
   resolved "https://registry.nlark.com/@babel/runtime/download/@babel/runtime-7.15.3.tgz?cache=0&sync_timestamp=1628666503436&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.15.3.tgz#2e1c2880ca118e5b2f9988322bd8a7656a32502b"
@@ -153,6 +161,11 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.nlark.com/concat-map/download/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
+
+core-js@^2.6.5:
+  version "2.6.12"
+  resolved "https://registry.npmmirror.com/core-js/download/core-js-2.6.12.tgz?cache=0&sync_timestamp=1632696208678&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fcore-js%2Fdownload%2Fcore-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
+  integrity sha1-2TM9+nsGXjR8xWgiGdb2kIWcwuw=
 
 deepmerge@^4.2.2:
   version "4.2.2"
@@ -331,12 +344,26 @@ pidusage@^2.0.21:
     qs "^6.9.4"
     reflect-metadata "^0.1.13"
 
+qiniu-js@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.nlark.com/qiniu-js/download/qiniu-js-3.3.3.tgz#50d64551515ca6ae89c14255bb4dd6d6724fe398"
+  integrity sha1-UNZFUVFcpq6JwUJVu03W1nJP45g=
+  dependencies:
+    "@babel/runtime-corejs2" "^7.10.2"
+    querystring "^0.2.1"
+    spark-md5 "^3.0.0"
+
 qs@^6.9.4:
   version "6.10.1"
   resolved "https://registry.nlark.com/qs/download/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
   integrity sha1-STFIL6jWR6Wqt5nFJx0hM7mB+2o=
   dependencies:
     side-channel "^1.0.4"
+
+querystring@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.nlark.com/querystring/download/querystring-0.2.1.tgz?cache=0&sync_timestamp=1626179435543&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fquerystring%2Fdownload%2Fquerystring-0.2.1.tgz#40d77615bb09d16902a85c3e38aa8b5ed761c2dd"
+  integrity sha1-QNd2FbsJ0WkCqFw+OKqLXtdhwt0=
 
 reflect-metadata@^0.1.13:
   version "0.1.13"
@@ -409,6 +436,11 @@ sourcemap-codec@^1.4.4:
   version "1.4.8"
   resolved "https://registry.nlark.com/sourcemap-codec/download/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
   integrity sha1-6oBL2UhXQC5pktBaOO8a41qatMQ=
+
+spark-md5@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.nlark.com/spark-md5/download/spark-md5-3.0.2.tgz#7952c4a30784347abcee73268e473b9c0167e3fc"
+  integrity sha1-eVLEoweENHq87nMmjkc7nAFn4/w=
 
 tslib@^1.9.0:
   version "1.14.1"

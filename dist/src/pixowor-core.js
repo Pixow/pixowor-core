@@ -51,8 +51,9 @@ import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
 import PixowApi from "pixow-api";
+import * as qiniu from "qiniu-js";
 var PixoworCore = /** @class */ (function () {
-    function PixoworCore(version, env) {
+    function PixoworCore(settings) {
         /**
          * Record workspace data
          */
@@ -73,9 +74,12 @@ var PixoworCore = /** @class */ (function () {
          * LocalStorage manager
          */
         this.storageManager = new StorageManager();
-        this.version = version;
-        this._environment = env;
-        this.pixowApi = new PixowApi({ area: env.area });
+        this.version = settings.version;
+        this._settings = settings;
+        this.pixowApi = new PixowApi({ area: settings.area });
+        if (settings.token) {
+            this.setPixowApiToken(settings.token);
+        }
     }
     /**
      * Set pixow api token
@@ -84,9 +88,9 @@ var PixoworCore = /** @class */ (function () {
     PixoworCore.prototype.setPixowApiToken = function (token) {
         this.pixowApi.setToken(token);
     };
-    Object.defineProperty(PixoworCore.prototype, "environment", {
+    Object.defineProperty(PixoworCore.prototype, "settings", {
         get: function () {
-            return this._environment;
+            return this._settings;
         },
         enumerable: false,
         configurable: true
@@ -163,11 +167,34 @@ var PixoworCore = /** @class */ (function () {
             plugin.deactivate();
         }
     };
+    /**
+     * Upload file to qiniu bucket
+     * @param fileConfig FileConfig
+     * @returns
+     */
+    PixoworCore.prototype.uploadFile = function (fileConfig) {
+        var _this = this;
+        var file = fileConfig.file, key = fileConfig.key;
+        return new Promise(function (resolve, reject) {
+            _this.pixowApi.util.getQiniuToken({ name: key }).then(function (res) {
+                var token = res.data.token;
+                qiniu.upload(file, key, token).subscribe({
+                    next: function (res) { },
+                    error: function (err) {
+                        reject(err);
+                    },
+                    complete: function (res) {
+                        resolve(res);
+                    },
+                });
+            });
+        });
+    };
     PixoworCore = __decorate([
         Injectable({
             providedIn: "root",
         }),
-        __metadata("design:paramtypes", [String, Object])
+        __metadata("design:paramtypes", [Object])
     ], PixoworCore);
     return PixoworCore;
 }());

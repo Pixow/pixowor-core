@@ -5,11 +5,14 @@ import { StateManager } from "./state-manager";
 import { WorkspaceManager } from "./workspace-manager";
 import { StorageManager } from "./storage-manager";
 import PixowApi, { Area } from "pixow-api";
-export declare type Env = {
+export declare type Settings = {
+    lang: string;
+    version: string;
     area: Area;
     production: boolean;
     environment: string;
     bucket: string;
+    token: string;
     API_URL: string;
     WEB_RESOURCE_URI: string;
     TEST_GAME_CONFIG_IP_MOBILE: string;
@@ -19,6 +22,10 @@ export declare type Env = {
     TEMP_PATH: string;
     APP_PATH: string;
 };
+export interface UploadFileConfig {
+    file: File;
+    key: string;
+}
 export declare class PixoworCore {
     /**
      * App version, sync with package version
@@ -45,14 +52,14 @@ export declare class PixoworCore {
      */
     storageManager: StorageManager;
     pixowApi: PixowApi;
-    private _environment;
-    constructor(version: string, env: Env);
+    private _settings;
+    constructor(settings: Settings);
     /**
      * Set pixow api token
      * @param token - Get token from signin api
      */
     setPixowApiToken(token: string): void;
-    get environment(): Env;
+    get settings(): Settings;
     private dependencyValid;
     /**
      * Install plugin, and check plugin dependencies has bee installed.
@@ -69,4 +76,10 @@ export declare class PixoworCore {
      * @param {string} pid - The plugin id need deactivate
      */
     deactivatePlugin(pid: string): void;
+    /**
+     * Upload file to qiniu bucket
+     * @param fileConfig FileConfig
+     * @returns
+     */
+    uploadFile(fileConfig: UploadFileConfig): Promise<unknown>;
 }

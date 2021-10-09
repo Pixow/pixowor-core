@@ -7,12 +7,16 @@ import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
 import PixowApi, { Area } from "pixow-api";
+import * as qiniu from "qiniu-js";
 
-export type Env = {
+export type Settings = {
+  lang: string;
+  version: string;
   area: Area;
   production: boolean;
   environment: string;
   bucket: string;
+  token: string;
   API_URL: string;
   WEB_RESOURCE_URI: string;
   TEST_GAME_CONFIG_IP_MOBILE: string;
@@ -22,6 +26,12 @@ export type Env = {
   TEMP_PATH: string;
   APP_PATH: string;
 };
+
+export interface UploadFileConfig {
+  file: File;
+  key: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -58,14 +68,18 @@ export class PixoworCore {
 
   public pixowApi: PixowApi;
 
-  private _environment: Env;
+  private _settings: Settings;
 
-  constructor(version: string, env: Env) {
-    this.version = version;
+  constructor(settings: Settings) {
+    this.version = settings.version;
 
-    this._environment = env;
+    this._settings = settings;
 
-    this.pixowApi = new PixowApi({ area: env.area });
+    this.pixowApi = new PixowApi({ area: settings.area });
+
+    if (settings.token) {
+      this.setPixowApiToken(settings.token);
+    }
   }
 
   /**
@@ -76,8 +90,8 @@ export class PixoworCore {
     this.pixowApi.setToken(token);
   }
 
-  public get environment() {
-    return this._environment
+  public get settings() {
+    return this._settings;
   }
 
   private dependencyValid(installedVersion: string, requiredVersion: string) {
@@ -138,9 +152,8 @@ export class PixoworCore {
    * @param plugins - The plugin need activate
    */
   public activatePlugins(plugins: Plugin[]) {
-    
     for (const plugin of plugins) {
-      this.stateManager.registerPlugin(plugin)
+      this.stateManager.registerPlugin(plugin);
       plugin.activate();
     }
   }
@@ -155,5 +168,29 @@ export class PixoworCore {
     if (plugin) {
       plugin.deactivate();
     }
+  }
+
+  /**
+   * Upload file to qiniu bucket
+   * @param fileConfig FileConfig 
+   * @returns 
+   */
+  public uploadFile(fileConfig: UploadFileConfig) {
+    const { file, key } = fileConfig;
+
+    return new Promise((resolve, reject) => {
+      this.pixowApi.util.getQiniuToken({ name: key }).then((res) => {
+        const { token } = res.data;
+        qiniu.upload(file, key, token).subscribe({
+          next(res) {},
+          error(err) {
+            reject(err);
+          },
+          complete(res) {
+            resolve(res);
+          },
+        });
+      });
+    });
   }
 }
