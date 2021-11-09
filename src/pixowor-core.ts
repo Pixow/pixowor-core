@@ -6,7 +6,7 @@ import { WorkspaceManager } from "./workspace-manager";
 import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
-import PixowApi, { Area } from "pixow-api";
+import PixowApi, { Area, Game } from "pixow-api";
 import * as qiniu from "qiniu-js";
 
 export type Settings = {
@@ -23,6 +23,7 @@ export type Settings = {
   TEST_GAME_CONFIG_PORT_MOBILE: number;
   APP_DATA_PATH: string;
   USER_DATA_PATH: string;
+  GAME_PROJECTS_PATH: string;
   TEMP_PATH: string;
   APP_PATH: string;
 };
@@ -92,6 +93,15 @@ export class PixoworCore {
 
   public get settings() {
     return this._settings;
+  }
+
+
+  public setEditingGameName(name: string) {
+    this.storageManager.set("editing_game", name);
+  }
+
+  public getEditingGameName(): string {
+    return this.storageManager.get("editing_game");
   }
 
   private dependencyValid(installedVersion: string, requiredVersion: string) {

@@ -19,6 +19,7 @@ export declare type Settings = {
     TEST_GAME_CONFIG_PORT_MOBILE: number;
     APP_DATA_PATH: string;
     USER_DATA_PATH: string;
+    GAME_PROJECTS_PATH: string;
     TEMP_PATH: string;
     APP_PATH: string;
 };
@@ -60,6 +61,8 @@ export declare class PixoworCore {
      */
     setPixowApiToken(token: string): void;
     get settings(): Settings;
+    setEditingGameName(name: string): void;
+    getEditingGameName(): string;
     private dependencyValid;
     /**
      * Install plugin, and check plugin dependencies has bee installed.

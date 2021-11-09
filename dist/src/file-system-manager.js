@@ -18,6 +18,20 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
+    FileSystemManager.prototype.mkdir = function (dir) {
+        return new Promise(function (resolve, reject) {
+            msgc
+                .invoke(IO_SERVICE, FileSystemEvents.MKDIR, { dir: dir })
+                .then(function (res) {
+                var error = res.error, data = res.data;
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(data);
+            });
+        });
+    };
     FileSystemManager.prototype.listDir = function (dir) {
         return new Promise(function (resolve, reject) {
             msgc

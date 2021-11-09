@@ -95,6 +95,12 @@ var PixoworCore = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    PixoworCore.prototype.setEditingGameName = function (name) {
+        this.storageManager.set("editing_game", name);
+    };
+    PixoworCore.prototype.getEditingGameName = function () {
+        return this.storageManager.get("editing_game");
+    };
     PixoworCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
         var versionDiff = diff(installedVersion, requiredVersion);
         return ((versionDiff === null ||

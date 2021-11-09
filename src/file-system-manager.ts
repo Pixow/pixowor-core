@@ -13,25 +13,40 @@ export type MsgcResponse = {
   data: any;
 };
 
-
-export const IO_SERVICE = "io-service"
+export const IO_SERVICE = "io-service";
 
 export class FileSystemManager {
-    public installI18n(translateObjs: { [k: string]: object }) {
-      return new Promise((resolve, reject) => {
-        msgc
-          .invoke(IO_SERVICE, FileSystemEvents.INSTALL_I18N, { translateObjs })
-          .then((res: MsgcResponse) => {
-            const { error, data } = res;
-            if (error) {
-              reject(error);
-              return;
-            }
+  public installI18n(translateObjs: { [k: string]: object }) {
+    return new Promise((resolve, reject) => {
+      msgc
+        .invoke(IO_SERVICE, FileSystemEvents.INSTALL_I18N, { translateObjs })
+        .then((res: MsgcResponse) => {
+          const { error, data } = res;
+          if (error) {
+            reject(error);
+            return;
+          }
 
-            resolve(data);
-          });
-      });
-    }
+          resolve(data);
+        });
+    });
+  }
+
+  public mkdir(dir: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      msgc
+        .invoke(IO_SERVICE, FileSystemEvents.MKDIR, { dir })
+        .then((res: MsgcResponse) => {
+          const { error, data } = res;
+          if (error) {
+            reject(error);
+            return;
+          }
+
+          resolve(data);
+        });
+    });
+  }
 
   public listDir(dir: string): Promise<FileStat[]> {
     return new Promise((resolve, reject) => {

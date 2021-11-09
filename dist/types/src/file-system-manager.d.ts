@@ -13,6 +13,7 @@ export declare class FileSystemManager {
     installI18n(translateObjs: {
         [k: string]: object;
     }): Promise<unknown>;
+    mkdir(dir: string): Promise<any>;
     listDir(dir: string): Promise<FileStat[]>;
     removeDir(dir: string): Promise<unknown>;
     readFile(file: string): Promise<unknown>;
