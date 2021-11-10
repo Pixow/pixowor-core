@@ -71,6 +71,9 @@ export class PixoworCore {
 
   private _settings: Settings;
 
+  private _ipcMain: any;
+  private _ipcRenderer: any;
+
   constructor(settings: Settings) {
     this.version = settings.version;
 
@@ -95,6 +98,22 @@ export class PixoworCore {
     return this._settings;
   }
 
+  public get ipcMain() {
+    return this._ipcMain;
+  }
+
+
+  public set ipcMain(ipc) {
+    this._ipcMain = ipc
+  }
+
+  public get ipcRenderer() {
+    return this._ipcRenderer
+  }
+  
+  public set ipcRenderer(ipc) {
+    this._ipcRenderer = ipc;
+  }
 
   public setEditingGameName(name: string) {
     this.storageManager.set("editing_game", name);

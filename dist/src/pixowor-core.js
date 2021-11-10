@@ -95,6 +95,26 @@ var PixoworCore = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(PixoworCore.prototype, "ipcMain", {
+        get: function () {
+            return this._ipcMain;
+        },
+        set: function (ipc) {
+            this._ipcMain = ipc;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(PixoworCore.prototype, "ipcRenderer", {
+        get: function () {
+            return this._ipcRenderer;
+        },
+        set: function (ipc) {
+            this._ipcRenderer = ipc;
+        },
+        enumerable: false,
+        configurable: true
+    });
     PixoworCore.prototype.setEditingGameName = function (name) {
         this.storageManager.set("editing_game", name);
     };

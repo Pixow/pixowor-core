@@ -54,6 +54,8 @@ export declare class PixoworCore {
     storageManager: StorageManager;
     pixowApi: PixowApi;
     private _settings;
+    private _ipcMain;
+    private _ipcRenderer;
     constructor(settings: Settings);
     /**
      * Set pixow api token
@@ -61,6 +63,10 @@ export declare class PixoworCore {
      */
     setPixowApiToken(token: string): void;
     get settings(): Settings;
+    get ipcMain(): any;
+    set ipcMain(ipc: any);
+    get ipcRenderer(): any;
+    set ipcRenderer(ipc: any);
     setEditingGameName(name: string): void;
     getEditingGameName(): string;
     private dependencyValid;
