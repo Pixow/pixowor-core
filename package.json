@@ -1,6 +1,6 @@
 {
   "name": "pixowor-core",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "main": "dist/src/index.js",
   "types": "dist/types/src/index.d.ts",
   "author": "moJiXiang",
@@ -15,6 +15,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-typescript": "^8.2.5",
+    "@types/electron-json-storage": "^4.5.0",
     "@types/events": "^3.0.0",
     "@types/semver": "^7.3.8",
     "rimraf": "^3.0.2",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@angular/core": "^12.2.2",
+    "electron-json-storage": "^4.5.0",
     "electron-re": "^1.0.10",
     "events": "^3.3.0",
     "pixow-api": "git+ssh://git@github.com:Pixow/pixow-api.git#develop",

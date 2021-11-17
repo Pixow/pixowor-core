@@ -10,7 +10,7 @@ export declare class StateManager {
     private _components;
     registerVariable(name: string, data?: any): void;
     unRegisterVariable(name: string): void;
-    getVariable(name: string): BehaviorSubject<any>;
+    getVariable<T>(name: string): BehaviorSubject<T>;
     registerPlugin(plugin: Plugin): void;
     getPlugin(id: string): Plugin;
     registerComponent(name: string, component: Component): void;

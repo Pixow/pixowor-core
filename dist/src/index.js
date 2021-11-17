@@ -1,3 +1,4 @@
+export * from 'pixow-api';
 export * from "./plugin";
 export * from "./pixowor-core";
 export * from "./events";

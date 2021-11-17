@@ -1,4 +1,5 @@
-export * from "./plugin"
+export * from 'pixow-api';
+export * from "./plugin";
 export * from "./pixowor-core";
 export * from "./events"
 export * from "./file-system-manager";

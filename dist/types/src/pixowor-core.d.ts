@@ -27,6 +27,10 @@ export interface UploadFileConfig {
     file: File;
     key: string;
 }
+export interface FileConfig {
+    file: string;
+    filePath: string;
+}
 export declare class PixoworCore {
     /**
      * App version, sync with package version
@@ -56,6 +60,7 @@ export declare class PixoworCore {
     private _settings;
     private _ipcMain;
     private _ipcRenderer;
+    private _storage;
     constructor(settings: Settings);
     /**
      * Set pixow api token
@@ -67,8 +72,12 @@ export declare class PixoworCore {
     set ipcMain(ipc: any);
     get ipcRenderer(): any;
     set ipcRenderer(ipc: any);
-    setEditingGameName(name: string): void;
-    getEditingGameName(): string;
+    get storage(): any;
+    set storage(v: any);
+    setEditingGame(stat: FileConfig): void;
+    getEditingGame(): FileConfig;
+    setEditingElement(stat: FileConfig): void;
+    getEditingElement(): FileConfig;
     private dependencyValid;
     /**
      * Install plugin, and check plugin dependencies has bee installed.

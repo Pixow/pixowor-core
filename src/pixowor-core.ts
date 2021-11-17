@@ -7,6 +7,7 @@ import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
 import PixowApi, { Area, Game } from "pixow-api";
+import storage from "electron-json-storage";
 import * as qiniu from "qiniu-js";
 
 export type Settings = {
@@ -31,6 +32,11 @@ export type Settings = {
 export interface UploadFileConfig {
   file: File;
   key: string;
+}
+
+export interface FileConfig {
+  file: string;
+  filePath: string;
 }
 
 @Injectable({
@@ -73,6 +79,7 @@ export class PixoworCore {
 
   private _ipcMain: any;
   private _ipcRenderer: any;
+  private _storage: any;
 
   constructor(settings: Settings) {
     this.version = settings.version;
@@ -102,25 +109,47 @@ export class PixoworCore {
     return this._ipcMain;
   }
 
-
   public set ipcMain(ipc) {
-    this._ipcMain = ipc
+    this._ipcMain = ipc;
   }
 
   public get ipcRenderer() {
-    return this._ipcRenderer
+    return this._ipcRenderer;
   }
-  
+
   public set ipcRenderer(ipc) {
     this._ipcRenderer = ipc;
   }
 
-  public setEditingGameName(name: string) {
-    this.storageManager.set("editing_game", name);
+  public get storage() {
+    return this._storage;
   }
 
-  public getEditingGameName(): string {
-    return this.storageManager.get("editing_game");
+  public set storage(v) {
+    this._storage = v;
+  }
+
+  public setEditingGame(stat: FileConfig) {
+    const editing = this.storage.getSync("editing");
+    this.storage.set("editing", Object.assign(editing, { editing_game: stat }));
+  }
+
+  public getEditingGame(): FileConfig {
+    const editing = this.storage.getSync("editing");
+    return editing["editing_game"];
+  }
+
+  public setEditingElement(stat: FileConfig) {
+    const editing = this.storage.getSync("editing");
+    this.storage.set(
+      "editing",
+      Object.assign(editing, { editing_element: stat })
+    );
+  }
+
+  public getEditingElement(): FileConfig {
+    const editing = this.storage.getSync("editing");
+    return editing["editing_element"];
   }
 
   private dependencyValid(installedVersion: string, requiredVersion: string) {
@@ -201,8 +230,8 @@ export class PixoworCore {
 
   /**
    * Upload file to qiniu bucket
-   * @param fileConfig FileConfig 
-   * @returns 
+   * @param fileConfig FileConfig
+   * @returns
    */
   public uploadFile(fileConfig: UploadFileConfig) {
     const { file, key } = fileConfig;

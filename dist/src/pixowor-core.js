@@ -115,11 +115,31 @@ var PixoworCore = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    PixoworCore.prototype.setEditingGameName = function (name) {
-        this.storageManager.set("editing_game", name);
+    Object.defineProperty(PixoworCore.prototype, "storage", {
+        get: function () {
+            return this._storage;
+        },
+        set: function (v) {
+            this._storage = v;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    PixoworCore.prototype.setEditingGame = function (stat) {
+        var editing = this.storage.getSync("editing");
+        this.storage.set("editing", Object.assign(editing, { editing_game: stat }));
     };
-    PixoworCore.prototype.getEditingGameName = function () {
-        return this.storageManager.get("editing_game");
+    PixoworCore.prototype.getEditingGame = function () {
+        var editing = this.storage.getSync("editing");
+        return editing["editing_game"];
+    };
+    PixoworCore.prototype.setEditingElement = function (stat) {
+        var editing = this.storage.getSync("editing");
+        this.storage.set("editing", Object.assign(editing, { editing_element: stat }));
+    };
+    PixoworCore.prototype.getEditingElement = function () {
+        var editing = this.storage.getSync("editing");
+        return editing["editing_element"];
     };
     PixoworCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
         var versionDiff = diff(installedVersion, requiredVersion);

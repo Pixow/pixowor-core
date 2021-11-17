@@ -11,10 +11,7 @@ export class StateManager {
     string,
     BehaviorSubject<any>
   >();
-  private _components: Map<string, Component> = new Map<
-    string,
-    Component
-  >();
+  private _components: Map<string, Component> = new Map<string, Component>();
 
   registerVariable(name: string, data?: any) {
     this._variables.set(name, new BehaviorSubject(data || null));
@@ -24,7 +21,7 @@ export class StateManager {
     this._variables.delete(name);
   }
 
-  getVariable(name: string) {
+  getVariable<T>(name: string): BehaviorSubject<T> {
     return this._variables.get(name);
   }
 
@@ -47,6 +44,4 @@ export class StateManager {
   getComponent(name: string): Component {
     return this._components.get(name);
   }
-
-
 }
