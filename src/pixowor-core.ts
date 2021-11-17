@@ -152,6 +152,19 @@ export class PixoworCore {
     return editing["editing_element"];
   }
 
+  public setEditingScene(stat: FileConfig) {
+    const editing = this.storage.getSync("editing");
+    this.storage.set(
+      "editing",
+      Object.assign(editing, { editing_scene: stat })
+    );
+  }
+
+  public getEditingScene(): FileConfig {
+    const editing = this.storage.getSync("editing");
+    return editing["editing_scene"];
+  }
+
   private dependencyValid(installedVersion: string, requiredVersion: string) {
     const versionDiff = diff(installedVersion, requiredVersion);
     return (

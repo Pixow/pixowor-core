@@ -141,6 +141,14 @@ var PixoworCore = /** @class */ (function () {
         var editing = this.storage.getSync("editing");
         return editing["editing_element"];
     };
+    PixoworCore.prototype.setEditingScene = function (stat) {
+        var editing = this.storage.getSync("editing");
+        this.storage.set("editing", Object.assign(editing, { editing_scene: stat }));
+    };
+    PixoworCore.prototype.getEditingScene = function () {
+        var editing = this.storage.getSync("editing");
+        return editing["editing_scene"];
+    };
     PixoworCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
         var versionDiff = diff(installedVersion, requiredVersion);
         return ((versionDiff === null ||

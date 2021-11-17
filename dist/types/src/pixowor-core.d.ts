@@ -78,6 +78,8 @@ export declare class PixoworCore {
     getEditingGame(): FileConfig;
     setEditingElement(stat: FileConfig): void;
     getEditingElement(): FileConfig;
+    setEditingScene(stat: FileConfig): void;
+    getEditingScene(): FileConfig;
     private dependencyValid;
     /**
      * Install plugin, and check plugin dependencies has bee installed.
