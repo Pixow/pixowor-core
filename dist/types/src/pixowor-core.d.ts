@@ -23,10 +23,6 @@ export declare type Settings = {
     TEMP_PATH: string;
     APP_PATH: string;
 };
-export interface UploadFileConfig {
-    file: File;
-    key: string;
-}
 export interface FileConfig {
     file: string;
     filePath: string;
@@ -35,7 +31,7 @@ export declare class PixoworCore {
     /**
      * App version, sync with package version
      */
-    private version;
+    private _version;
     /**
      * Record workspace data
      */
@@ -43,24 +39,25 @@ export declare class PixoworCore {
     /**
      * Filesystem
      */
-    fileSystemManager: FileSystemManager;
+    fileSystem: FileSystemManager;
     /**
      * State manage data
      */
-    stateManager: StateManager;
+    state: StateManager;
     /**
      * Service manager
      */
-    serviceManager: ServiceManager;
+    service: ServiceManager;
     /**
      * LocalStorage manager
      */
-    storageManager: StorageManager;
+    storage: StorageManager;
     pixowApi: PixowApi;
     private _settings;
+    /** Pixowor ipcMain process */
     private _ipcMain;
+    /** Pixowor ipcRenderer process */
     private _ipcRenderer;
-    private _storage;
     constructor(settings: Settings);
     /**
      * Set pixow api token
@@ -72,14 +69,8 @@ export declare class PixoworCore {
     set ipcMain(ipc: any);
     get ipcRenderer(): any;
     set ipcRenderer(ipc: any);
-    get storage(): any;
-    set storage(v: any);
-    setEditingGame(stat: FileConfig): void;
-    getEditingGame(): FileConfig;
-    setEditingElement(stat: FileConfig): void;
-    getEditingElement(): FileConfig;
-    setEditingScene(stat: FileConfig): void;
-    getEditingScene(): FileConfig;
+    get fileStorage(): any;
+    set fileStorage(v: any);
     private dependencyValid;
     /**
      * Install plugin, and check plugin dependencies has bee installed.
@@ -96,10 +87,4 @@ export declare class PixoworCore {
      * @param {string} pid - The plugin id need deactivate
      */
     deactivatePlugin(pid: string): void;
-    /**
-     * Upload file to qiniu bucket
-     * @param fileConfig FileConfig
-     * @returns
-     */
-    uploadFile(fileConfig: UploadFileConfig): Promise<unknown>;
 }

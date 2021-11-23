@@ -18,6 +18,6 @@ export class ServiceManager {
   }
 
   registCommand(command: Command) {
-	this.commands.set(command.id, command);
+    this.commands.set(command.id, command);
   }
 }

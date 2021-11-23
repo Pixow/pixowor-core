@@ -18,28 +18,16 @@ export enum Placements {
   TOAST = "toast"
 }
 
-export class WorkspaceSidedock {}
-
-export class WorkspaceRibbon {}
-
-export class WorkspaceSplit {}
 
 export class WorkspaceManager extends EventEmitter {
   private _slots: Map<string, Type<Component>> = new Map<
     string,
     Type<Component>
   >();
-  public leftSplit: WorkspaceSidedock;
-  public rightSplit: WorkspaceSidedock;
-  public leftRibbon: WorkspaceRibbon;
-  public rightRibbon: WorkspaceRibbon;
-  public rootSplit: WorkspaceSplit;
 
   constructor() {
     super();
   }
-
-  async changeLayout() {}
 
   /**
    * Regist component in a slot

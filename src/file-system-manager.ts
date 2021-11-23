@@ -1,6 +1,7 @@
 import { MessageChannel as msgc } from "electron-re";
+import PixowApi from "pixow-api";
 import { FileSystemEvents } from "./events";
-
+import * as qiniu from "qiniu-js";
 export interface FileStat {
   type: string;
   path: string;
@@ -15,7 +16,46 @@ export type MsgcResponse = {
 
 export const IO_SERVICE = "io-service";
 
+export interface UploadFileConfig {
+  file: File;
+  key: string;
+}
+
+
 export class FileSystemManager {
+
+  constructor(private pixowApi: PixowApi) {
+
+  }
+  /**
+  * Upload file to qiniu bucket
+  * @param fileConfig FileConfig
+  * @returns
+  */
+  public uploadFile(fileConfig: UploadFileConfig) {
+    const { file, key } = fileConfig;
+
+    return new Promise((resolve, reject) => {
+      this.pixowApi.util.getQiniuToken({ name: key }).then((res) => {
+        const { token } = res.data;
+        qiniu.upload(file, key, token).subscribe({
+          next(res) { },
+          error(err) {
+            reject(err);
+          },
+          complete(res) {
+            resolve(res);
+          },
+        });
+      });
+    });
+  }
+
+  /**
+   * Install I18n files
+   * @param translateObjs i18n translate objects
+   * @returns 
+   */
   public installI18n(translateObjs: { [k: string]: object }) {
     return new Promise((resolve, reject) => {
       msgc

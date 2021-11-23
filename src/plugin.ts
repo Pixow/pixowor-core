@@ -71,7 +71,7 @@ export abstract class Plugin {
     this.dependencies = manifest.dependencies;
   }
 
-  async install() {}
+  async install() { }
   abstract activate(): void;
   abstract deactivate(): void;
 
@@ -82,10 +82,10 @@ export abstract class Plugin {
     return this._pixoworCore;
   }
 
-  public colorLog(message: string) {
+  public colorLog(message: string, background: string = "#222", color: string = "#bada55") {
     console.log(
       `%c ${message}`,
-      "background: #222; color: #bada55"
+      `background: ${background}; color: ${color}`
     );
   }
 
@@ -94,7 +94,7 @@ export abstract class Plugin {
    * @param command Command
    */
   public addCommand(command: Command) {
-    this.pixoworCore.serviceManager.registCommand(command);
+    this.pixoworCore.service.registCommand(command);
   }
 
   /**
@@ -112,15 +112,15 @@ export abstract class Plugin {
    * @param  {Component} component - Register a angular component. The function will use component classname as key to regist.
    */
   public registerComponent(name: string, component: Component) {
-    this.pixoworCore.stateManager.registerComponent(name, component);
+    this.pixoworCore.state.registerComponent(name, component);
   }
 
   /**
-   * UnRegister angular component that registed.
+   * DestroyComponent angular component that registed.
    * @param name - Component name
    */
-  public unRrgisterComponent(name: string) {
-    this.pixoworCore.stateManager.unregisterComponent(name);
+  public destroyComponent(name: string) {
+    this.pixoworCore.state.destroyComponent(name);
   }
 
   /**
@@ -129,7 +129,11 @@ export abstract class Plugin {
    * @param data - variable init data
    */
   public registerVariable(name: string, data: any = null) {
-    this.pixoworCore.stateManager.registerVariable(name, data);
+    if (this.pixoworCore.state.getVariable(name)) {
+      this.colorLog(`${name} has been registed by other plugin!`, "white", "red");
+      return
+    }
+    this.pixoworCore.state.registerVariable(name, data);
   }
 
   /**
@@ -137,7 +141,7 @@ export abstract class Plugin {
    * @param name - variable name
    */
   public unRegisterVariable(name: string) {
-    this.pixoworCore.stateManager.unRegisterVariable(name);
+    this.pixoworCore.state.unRegisterVariable(name);
   }
 
   /**
@@ -167,6 +171,6 @@ export abstract class Plugin {
    * @returns
    */
   public get(key: string) {
-    return this.pixoworCore.storageManager.get(key);
+    return this.pixoworCore.storage.get(key);
   }
 }

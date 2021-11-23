@@ -62,15 +62,17 @@ var Plugin = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Plugin.prototype.colorLog = function (message) {
-        console.log("%c " + message, "background: #222; color: #bada55");
+    Plugin.prototype.colorLog = function (message, background, color) {
+        if (background === void 0) { background = "#222"; }
+        if (color === void 0) { color = "#bada55"; }
+        console.log("%c " + message, "background: " + background + "; color: " + color);
     };
     /**
      * Register a command globally. The command id and name will be automatically prefixed with this plugin's id and name.
      * @param command Command
      */
     Plugin.prototype.addCommand = function (command) {
-        this.pixoworCore.serviceManager.registCommand(command);
+        this.pixoworCore.service.registCommand(command);
     };
     /**
      *
@@ -86,14 +88,14 @@ var Plugin = /** @class */ (function () {
      * @param  {Component} component - Register a angular component. The function will use component classname as key to regist.
      */
     Plugin.prototype.registerComponent = function (name, component) {
-        this.pixoworCore.stateManager.registerComponent(name, component);
+        this.pixoworCore.state.registerComponent(name, component);
     };
     /**
-     * UnRegister angular component that registed.
+     * DestroyComponent angular component that registed.
      * @param name - Component name
      */
-    Plugin.prototype.unRrgisterComponent = function (name) {
-        this.pixoworCore.stateManager.unregisterComponent(name);
+    Plugin.prototype.destroyComponent = function (name) {
+        this.pixoworCore.state.destroyComponent(name);
     };
     /**
      * Regist variable
@@ -102,14 +104,18 @@ var Plugin = /** @class */ (function () {
      */
     Plugin.prototype.registerVariable = function (name, data) {
         if (data === void 0) { data = null; }
-        this.pixoworCore.stateManager.registerVariable(name, data);
+        if (this.pixoworCore.state.getVariable(name)) {
+            this.colorLog(name + " has been registed by other plugin!", "white", "red");
+            return;
+        }
+        this.pixoworCore.state.registerVariable(name, data);
     };
     /**
      * UnRegister variable
      * @param name - variable name
      */
     Plugin.prototype.unRegisterVariable = function (name) {
-        this.pixoworCore.stateManager.unRegisterVariable(name);
+        this.pixoworCore.state.unRegisterVariable(name);
     };
     /**
      * Toast message
@@ -135,7 +141,7 @@ var Plugin = /** @class */ (function () {
      * @returns
      */
     Plugin.prototype.get = function (key) {
-        return this.pixoworCore.storageManager.get(key);
+        return this.pixoworCore.storage.get(key);
     };
     return Plugin;
 }());

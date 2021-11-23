@@ -14,21 +14,9 @@ export declare enum Placements {
     STATUSBAR = "statusbar",
     TOAST = "toast"
 }
-export declare class WorkspaceSidedock {
-}
-export declare class WorkspaceRibbon {
-}
-export declare class WorkspaceSplit {
-}
 export declare class WorkspaceManager extends EventEmitter {
     private _slots;
-    leftSplit: WorkspaceSidedock;
-    rightSplit: WorkspaceSidedock;
-    leftRibbon: WorkspaceRibbon;
-    rightRibbon: WorkspaceRibbon;
-    rootSplit: WorkspaceSplit;
     constructor();
-    changeLayout(): Promise<void>;
     /**
      * Regist component in a slot
      * @param placement - Placement name

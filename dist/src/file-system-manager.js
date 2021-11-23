@@ -1,9 +1,34 @@
 import { MessageChannel as msgc } from "electron-re";
 import { FileSystemEvents } from "./events";
+import * as qiniu from "qiniu-js";
 export var IO_SERVICE = "io-service";
 var FileSystemManager = /** @class */ (function () {
-    function FileSystemManager() {
+    function FileSystemManager(pixowApi) {
+        this.pixowApi = pixowApi;
     }
+    /**
+    * Upload file to qiniu bucket
+    * @param fileConfig FileConfig
+    * @returns
+    */
+    FileSystemManager.prototype.uploadFile = function (fileConfig) {
+        var _this = this;
+        var file = fileConfig.file, key = fileConfig.key;
+        return new Promise(function (resolve, reject) {
+            _this.pixowApi.util.getQiniuToken({ name: key }).then(function (res) {
+                var token = res.data.token;
+                qiniu.upload(file, key, token).subscribe({
+                    next: function (res) { },
+                    error: function (err) {
+                        reject(err);
+                    },
+                    complete: function (res) {
+                        resolve(res);
+                    },
+                });
+            });
+        });
+    };
     FileSystemManager.prototype.installI18n = function (translateObjs) {
         return new Promise(function (resolve, reject) {
             msgc

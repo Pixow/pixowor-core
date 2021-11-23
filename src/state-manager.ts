@@ -37,7 +37,7 @@ export class StateManager {
     this._components.set(name, component);
   }
 
-  unregisterComponent(name: string) {
+  destroyComponent(name: string) {
     this._components.delete(name);
   }
 

@@ -26,7 +26,7 @@ var StateManager = /** @class */ (function () {
     StateManager.prototype.registerComponent = function (name, component) {
         this._components.set(name, component);
     };
-    StateManager.prototype.unregisterComponent = function (name) {
+    StateManager.prototype.destroyComponent = function (name) {
         this._components.delete(name);
     };
     StateManager.prototype.getComponent = function (name) {

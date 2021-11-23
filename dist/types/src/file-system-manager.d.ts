@@ -1,3 +1,4 @@
+import PixowApi from "pixow-api";
 export interface FileStat {
     type: string;
     path: string;
@@ -9,7 +10,19 @@ export declare type MsgcResponse = {
     data: any;
 };
 export declare const IO_SERVICE = "io-service";
+export interface UploadFileConfig {
+    file: File;
+    key: string;
+}
 export declare class FileSystemManager {
+    private pixowApi;
+    constructor(pixowApi: PixowApi);
+    /**
+    * Upload file to qiniu bucket
+    * @param fileConfig FileConfig
+    * @returns
+    */
+    uploadFile(fileConfig: UploadFileConfig): Promise<unknown>;
     installI18n(translateObjs: {
         [k: string]: object;
     }): Promise<unknown>;

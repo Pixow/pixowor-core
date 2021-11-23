@@ -6,3 +6,4 @@ export * from "./file-system-manager";
 export * from "./state-manager";
 export * from "./service-manager";
 export * from "./workspace-manager";
+export * from "./consts";

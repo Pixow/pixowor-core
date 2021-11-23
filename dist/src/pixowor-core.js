@@ -51,7 +51,6 @@ import { diff, gte } from "semver";
 import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
 import PixowApi from "pixow-api";
-import * as qiniu from "qiniu-js";
 var PixoworCore = /** @class */ (function () {
     function PixoworCore(settings) {
         /**
@@ -59,24 +58,21 @@ var PixoworCore = /** @class */ (function () {
          */
         this.workspace = new WorkspaceManager();
         /**
-         * Filesystem
-         */
-        this.fileSystemManager = new FileSystemManager();
-        /**
          * State manage data
          */
-        this.stateManager = new StateManager();
+        this.state = new StateManager();
         /**
          * Service manager
          */
-        this.serviceManager = new ServiceManager();
+        this.service = new ServiceManager();
         /**
          * LocalStorage manager
          */
-        this.storageManager = new StorageManager();
-        this.version = settings.version;
+        this.storage = new StorageManager();
+        this._version = settings.version;
         this._settings = settings;
         this.pixowApi = new PixowApi({ area: settings.area });
+        this.fileSystem = new FileSystemManager(this.pixowApi);
         if (settings.token) {
             this.setPixowApiToken(settings.token);
         }
@@ -115,40 +111,16 @@ var PixoworCore = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(PixoworCore.prototype, "storage", {
+    Object.defineProperty(PixoworCore.prototype, "fileStorage", {
         get: function () {
-            return this._storage;
+            return this.storage.getFileStorage();
         },
         set: function (v) {
-            this._storage = v;
+            this.storage.setFileStorage(v);
         },
         enumerable: false,
         configurable: true
     });
-    PixoworCore.prototype.setEditingGame = function (stat) {
-        var editing = this.storage.getSync("editing");
-        this.storage.set("editing", Object.assign(editing, { editing_game: stat }));
-    };
-    PixoworCore.prototype.getEditingGame = function () {
-        var editing = this.storage.getSync("editing");
-        return editing["editing_game"];
-    };
-    PixoworCore.prototype.setEditingElement = function (stat) {
-        var editing = this.storage.getSync("editing");
-        this.storage.set("editing", Object.assign(editing, { editing_element: stat }));
-    };
-    PixoworCore.prototype.getEditingElement = function () {
-        var editing = this.storage.getSync("editing");
-        return editing["editing_element"];
-    };
-    PixoworCore.prototype.setEditingScene = function (stat) {
-        var editing = this.storage.getSync("editing");
-        this.storage.set("editing", Object.assign(editing, { editing_scene: stat }));
-    };
-    PixoworCore.prototype.getEditingScene = function () {
-        var editing = this.storage.getSync("editing");
-        return editing["editing_scene"];
-    };
     PixoworCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
         var versionDiff = diff(installedVersion, requiredVersion);
         return ((versionDiff === null ||
@@ -168,13 +140,13 @@ var PixoworCore = /** @class */ (function () {
                     case 0:
                         minAppVersion = plugin.minAppVersion, dependencies = plugin.dependencies;
                         installErrors = [];
-                        if (!this.dependencyValid(this.version, minAppVersion)) {
-                            installErrors.push("Plugin " + plugin.name + " need minAppVersion " + minAppVersion + ", but app version is " + this.version + "!");
+                        if (!this.dependencyValid(this._version, minAppVersion)) {
+                            installErrors.push("Plugin " + plugin.name + " need minAppVersion " + minAppVersion + ", but app version is " + this._version + "!");
                         }
                         if (dependencies) {
                             for (pluginName in dependencies) {
                                 requiredPluginVersion = dependencies[pluginName];
-                                installedPlugin = this.stateManager.getPlugin(pluginName);
+                                installedPlugin = this.state.getPlugin(pluginName);
                                 if (!installedPlugin) {
                                     installErrors.push("Plugin " + pluginName + " has not installed");
                                 }
@@ -187,7 +159,7 @@ var PixoworCore = /** @class */ (function () {
                             }
                         }
                         if (!(installErrors.length === 0)) return [3 /*break*/, 2];
-                        this.stateManager.registerPlugin(plugin);
+                        this.state.registerPlugin(plugin);
                         return [4 /*yield*/, plugin.install()];
                     case 1:
                         _a.sent();
@@ -207,7 +179,7 @@ var PixoworCore = /** @class */ (function () {
     PixoworCore.prototype.activatePlugins = function (plugins) {
         for (var _i = 0, plugins_1 = plugins; _i < plugins_1.length; _i++) {
             var plugin = plugins_1[_i];
-            this.stateManager.registerPlugin(plugin);
+            this.state.registerPlugin(plugin);
             plugin.activate();
         }
     };
@@ -216,33 +188,10 @@ var PixoworCore = /** @class */ (function () {
      * @param {string} pid - The plugin id need deactivate
      */
     PixoworCore.prototype.deactivatePlugin = function (pid) {
-        var plugin = this.stateManager.getPlugin(pid);
+        var plugin = this.state.getPlugin(pid);
         if (plugin) {
             plugin.deactivate();
         }
-    };
-    /**
-     * Upload file to qiniu bucket
-     * @param fileConfig FileConfig
-     * @returns
-     */
-    PixoworCore.prototype.uploadFile = function (fileConfig) {
-        var _this = this;
-        var file = fileConfig.file, key = fileConfig.key;
-        return new Promise(function (resolve, reject) {
-            _this.pixowApi.util.getQiniuToken({ name: key }).then(function (res) {
-                var token = res.data.token;
-                qiniu.upload(file, key, token).subscribe({
-                    next: function (res) { },
-                    error: function (err) {
-                        reject(err);
-                    },
-                    complete: function (res) {
-                        resolve(res);
-                    },
-                });
-            });
-        });
     };
     PixoworCore = __decorate([
         Injectable({

@@ -8,7 +8,6 @@ import { Injectable } from "@angular/core";
 import { StorageManager } from "./storage-manager";
 import PixowApi, { Area, Game } from "pixow-api";
 import storage from "electron-json-storage";
-import * as qiniu from "qiniu-js";
 
 export type Settings = {
   lang: string;
@@ -29,10 +28,6 @@ export type Settings = {
   APP_PATH: string;
 };
 
-export interface UploadFileConfig {
-  file: File;
-  key: string;
-}
 
 export interface FileConfig {
   file: string;
@@ -46,7 +41,7 @@ export class PixoworCore {
   /**
    * App version, sync with package version
    */
-  private version: string;
+  private _version: string;
 
   /**
    * Record workspace data
@@ -56,37 +51,43 @@ export class PixoworCore {
   /**
    * Filesystem
    */
-  public fileSystemManager: FileSystemManager = new FileSystemManager();
+  public fileSystem: FileSystemManager;
 
   /**
    * State manage data
    */
-  public stateManager: StateManager = new StateManager();
+  public state: StateManager = new StateManager();
 
   /**
    * Service manager
    */
-  public serviceManager: ServiceManager = new ServiceManager();
+  public service: ServiceManager = new ServiceManager();
 
   /**
    * LocalStorage manager
    */
-  public storageManager: StorageManager = new StorageManager();
+  public storage: StorageManager = new StorageManager();
 
   public pixowApi: PixowApi;
 
   private _settings: Settings;
 
+  /** Pixowor ipcMain process */
   private _ipcMain: any;
+
+  /** Pixowor ipcRenderer process */
   private _ipcRenderer: any;
-  private _storage: any;
+
+
 
   constructor(settings: Settings) {
-    this.version = settings.version;
+    this._version = settings.version;
 
     this._settings = settings;
 
     this.pixowApi = new PixowApi({ area: settings.area });
+
+    this.fileSystem = new FileSystemManager(this.pixowApi);
 
     if (settings.token) {
       this.setPixowApiToken(settings.token);
@@ -121,48 +122,12 @@ export class PixoworCore {
     this._ipcRenderer = ipc;
   }
 
-  public get storage() {
-    return this._storage;
+  public get fileStorage() {
+    return this.storage.getFileStorage()
   }
 
-  public set storage(v) {
-    this._storage = v;
-  }
-
-  public setEditingGame(stat: FileConfig) {
-    const editing = this.storage.getSync("editing");
-    this.storage.set("editing", Object.assign(editing, { editing_game: stat }));
-  }
-
-  public getEditingGame(): FileConfig {
-    const editing = this.storage.getSync("editing");
-    return editing["editing_game"];
-  }
-
-  public setEditingElement(stat: FileConfig) {
-    const editing = this.storage.getSync("editing");
-    this.storage.set(
-      "editing",
-      Object.assign(editing, { editing_element: stat })
-    );
-  }
-
-  public getEditingElement(): FileConfig {
-    const editing = this.storage.getSync("editing");
-    return editing["editing_element"];
-  }
-
-  public setEditingScene(stat: FileConfig) {
-    const editing = this.storage.getSync("editing");
-    this.storage.set(
-      "editing",
-      Object.assign(editing, { editing_scene: stat })
-    );
-  }
-
-  public getEditingScene(): FileConfig {
-    const editing = this.storage.getSync("editing");
-    return editing["editing_scene"];
+  public set fileStorage(v) {
+    this.storage.setFileStorage(v);
   }
 
   private dependencyValid(installedVersion: string, requiredVersion: string) {
@@ -183,16 +148,16 @@ export class PixoworCore {
     const { minAppVersion, dependencies } = plugin;
 
     let installErrors: string[] = [];
-    if (!this.dependencyValid(this.version, minAppVersion)) {
+    if (!this.dependencyValid(this._version, minAppVersion)) {
       installErrors.push(
-        `Plugin ${plugin.name} need minAppVersion ${minAppVersion}, but app version is ${this.version}!`
+        `Plugin ${plugin.name} need minAppVersion ${minAppVersion}, but app version is ${this._version}!`
       );
     }
 
     if (dependencies) {
       for (const pluginName in dependencies) {
         const requiredPluginVersion = dependencies[pluginName];
-        const installedPlugin = this.stateManager.getPlugin(pluginName);
+        const installedPlugin = this.state.getPlugin(pluginName);
 
         if (!installedPlugin) {
           installErrors.push(`Plugin ${pluginName} has not installed`);
@@ -211,7 +176,7 @@ export class PixoworCore {
     }
 
     if (installErrors.length === 0) {
-      this.stateManager.registerPlugin(plugin);
+      this.state.registerPlugin(plugin);
       await plugin.install();
     } else {
       installErrors.forEach((err) => console.error(err));
@@ -224,7 +189,7 @@ export class PixoworCore {
    */
   public activatePlugins(plugins: Plugin[]) {
     for (const plugin of plugins) {
-      this.stateManager.registerPlugin(plugin);
+      this.state.registerPlugin(plugin);
       plugin.activate();
     }
   }
@@ -234,34 +199,10 @@ export class PixoworCore {
    * @param {string} pid - The plugin id need deactivate
    */
   public deactivatePlugin(pid: string) {
-    const plugin = this.stateManager.getPlugin(pid);
+    const plugin = this.state.getPlugin(pid);
 
     if (plugin) {
       plugin.deactivate();
     }
-  }
-
-  /**
-   * Upload file to qiniu bucket
-   * @param fileConfig FileConfig
-   * @returns
-   */
-  public uploadFile(fileConfig: UploadFileConfig) {
-    const { file, key } = fileConfig;
-
-    return new Promise((resolve, reject) => {
-      this.pixowApi.util.getQiniuToken({ name: key }).then((res) => {
-        const { token } = res.data;
-        qiniu.upload(file, key, token).subscribe({
-          next(res) {},
-          error(err) {
-            reject(err);
-          },
-          complete(res) {
-            resolve(res);
-          },
-        });
-      });
-    });
   }
 }

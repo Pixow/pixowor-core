@@ -14,6 +14,6 @@ export declare class StateManager {
     registerPlugin(plugin: Plugin): void;
     getPlugin(id: string): Plugin;
     registerComponent(name: string, component: Component): void;
-    unregisterComponent(name: string): void;
+    destroyComponent(name: string): void;
     getComponent(name: string): Component;
 }

@@ -59,7 +59,7 @@ export declare abstract class Plugin {
      * Get pixowor core
      */
     get pixoworCore(): PixoworCore;
-    colorLog(message: string): void;
+    colorLog(message: string, background?: string, color?: string): void;
     /**
      * Register a command globally. The command id and name will be automatically prefixed with this plugin's id and name.
      * @param command Command
@@ -78,10 +78,10 @@ export declare abstract class Plugin {
      */
     registerComponent(name: string, component: Component): void;
     /**
-     * UnRegister angular component that registed.
+     * DestroyComponent angular component that registed.
      * @param name - Component name
      */
-    unRrgisterComponent(name: string): void;
+    destroyComponent(name: string): void;
     /**
      * Regist variable
      * @param name - variable name
