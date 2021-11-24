@@ -23,6 +23,11 @@ export declare class FileSystemManager {
     * @returns
     */
     uploadFile(fileConfig: UploadFileConfig): Promise<unknown>;
+    /**
+     * Install I18n files
+     * @param translateObjs i18n translate objects
+     * @returns
+     */
     installI18n(translateObjs: {
         [k: string]: object;
     }): Promise<unknown>;

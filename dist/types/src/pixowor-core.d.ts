@@ -71,6 +71,8 @@ export declare class PixoworCore {
     set ipcRenderer(ipc: any);
     get fileStorage(): any;
     set fileStorage(v: any);
+    getEditingObject(key: string): any;
+    setEditingObject(key: string, data: Object): void;
     private dependencyValid;
     /**
      * Install plugin, and check plugin dependencies has bee installed.

@@ -29,6 +29,11 @@ var FileSystemManager = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Install I18n files
+     * @param translateObjs i18n translate objects
+     * @returns
+     */
     FileSystemManager.prototype.installI18n = function (translateObjs) {
         return new Promise(function (resolve, reject) {
             msgc

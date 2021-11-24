@@ -2,6 +2,18 @@
 
 > Supply plugin file system function, state manage function, workspace ui manage and storage (localStorage and fileStorage)
 
+1. **installPlugin** <small> Install Plugin, and check plugin dependencies has been installed</small>
+
+```
+this.pixoworCore.installPlugin(plugin: Plugin)
+```
+
+2. **activePlugins** <small>Activate plugins that has been installed.</small>
+
+```
+this.pixoworCore.activatePlugins(plugins: Plugin[])
+```
+
 ## FileSystemManager
 
 1. **uploadFile** <small>Upload file to qiniu bucket</small>

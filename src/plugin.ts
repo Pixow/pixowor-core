@@ -71,6 +71,7 @@ export abstract class Plugin {
     this.dependencies = manifest.dependencies;
   }
 
+  // Install i18n files and prepare variables the plugin would use.
   async install() { }
   abstract activate(): void;
   abstract deactivate(): void;

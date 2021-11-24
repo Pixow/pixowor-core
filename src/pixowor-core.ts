@@ -205,4 +205,13 @@ export class PixoworCore {
       plugin.deactivate();
     }
   }
+
+
+  public getEditingObject(key: string) {
+    return this.storage.getObjectFromJsonFile("editing", key);
+  }
+
+  public setEditingObject(key: string, data: Object) {
+    this.storage.setObjectInJsonFile("editing", key, data);
+  }
 }

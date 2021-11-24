@@ -121,6 +121,12 @@ var PixoworCore = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    PixoworCore.prototype.getEditingObject = function (key) {
+        return this.storage.getObjectFromJsonFile("editing", key);
+    };
+    PixoworCore.prototype.setEditingObject = function (key, data) {
+        this.storage.setObjectInJsonFile("editing", key, data);
+    };
     PixoworCore.prototype.dependencyValid = function (installedVersion, requiredVersion) {
         var versionDiff = diff(installedVersion, requiredVersion);
         return ((versionDiff === null ||
